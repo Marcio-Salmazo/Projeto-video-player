@@ -5,10 +5,10 @@ import time
 import cv2
 
 from PyQt5.QtCore import Qt, QTimer
-from PyQt5.QtGui import QKeySequence, QFont
+from PyQt5.QtGui import QKeySequence, QFont, QIcon, QPixmap
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QSlider, QWidget, QVBoxLayout, \
-    QHBoxLayout, QLabel, QShortcut, QApplication
+    QHBoxLayout, QLabel, QShortcut, QApplication, QMessageBox
 
 from KeyMapper import KeyMapper
 from Model import Model
@@ -60,6 +60,10 @@ class VideoPlayer(QMainWindow):
         self.setWindowTitle("Video Player com VLC")  # Define o título da janela do player
         self.setGeometry(100, 100, 900, 500)  # Define a geometria da janela
 
+        # Definindo um ícone para a janela
+        model = Model()
+        self.setWindowIcon(QIcon(model.resource_path("figures/fig_mouse")))
+
         # Criando um widget central, ele será responsável por aagrupar o conteúdo da janela
         self.central_widget = QWidget(self)  # Cria uma instância do QWidget
         self.setCentralWidget(self.central_widget)  # Define a instância criada como o central
@@ -76,7 +80,7 @@ class VideoPlayer(QMainWindow):
 
         # Criando um widget dedicado para os controles, com uma altura fixa
         self.controls_widget = QWidget()  # Cria uma instância do QWidget
-        self.controls_widget.setFixedHeight(500)  # Define uma altura fixa para os controles
+        self.controls_widget.setFixedHeight(700)  # Define uma altura fixa para os controles
         self.controls_widget.setFixedWidth(300)  # Define uma largura fixa para os controles
 
         self.control_layout = QVBoxLayout(self.controls_widget)  # Define um layout vertical para os controles
@@ -140,14 +144,6 @@ class VideoPlayer(QMainWindow):
         self.play_button = QPushButton("Play/Pause")  # botão para dar play ou pause
         self.exit_button = QPushButton("Fechar programa")  # botão para sair do programa
 
-        '''
-        self.save_ind = QPushButton(
-            "Salvar frame como 'Indolor'")  # botão responsável por salvar o frame na pasta 'indolor'
-        self.save_pd = QPushButton(
-            "Salvar frame como 'Pouca dor'")  # botão responsável por salvar o frame na pasta 'pouca dor'
-        self.save_md = QPushButton(
-            "Salvar frame como 'Muita dor'")  # botão responsável por salvar o frame na pasta 'muita dor'
-        '''
 
         self.change_keys = QPushButton(
             "Escolher novas teclas de atalho")  # botão responsável por modificar as teclas de atalho
@@ -166,9 +162,7 @@ class VideoPlayer(QMainWindow):
         self.speed_slider.setTickPosition(QSlider.TicksBelow)  # Define a posição do ponteiro do slider
         self.speed_slider.setValue(2)  # Definindo o valor (posição) inicial do slider em 1x
 
-        # ------------
         self.capture_frame_btn = QPushButton("Capturar frame")
-        # ------------
 
         # -------------------------------------------------------------------------------------------------------------
 
@@ -190,15 +184,11 @@ class VideoPlayer(QMainWindow):
         self.control_layout.addWidget(self.speed_label)
         self.control_layout.addWidget(self.speed_slider)
 
-        # -----------
         self.control_layout.addWidget(self.capture_frame_btn)
-        # -----------
 
         self.control_layout.addWidget(self.open_button)
 
-        # Inserção de labels para as teclas de atalho
-
-        # Inserção de labels para as teclas de atalho
+        # Inserção de uma label para as teclas de atalho
         self.keys_label = QLabel()
         font = QFont("Arial", 10)  # Nome, tamanho, peso (opcional)
         self.keys_label.setFont(font)
@@ -226,6 +216,22 @@ class VideoPlayer(QMainWindow):
         self.control_layout.addWidget(self.change_keys)
         self.control_layout.addWidget(self.exit_button)
 
+        # Inserção de label para inserir a logo da UFU
+        self.logo_label = QLabel()
+        pixmap = QPixmap(model.resource_path("figures/fig_ufu.png"))
+        pixmap = pixmap.scaled(150, 150, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        self.logo_label.setPixmap(pixmap)
+        self.logo_label.setAlignment(Qt.AlignCenter)  # Centraliza a imagem
+        self.logo_label.setContentsMargins(0, 30, 0, 0) # Padding para espaçar a exibição da imagem
+        self.control_layout.addWidget(self.logo_label)
+
+        # Inserção de label para definir a versão do software
+        # Seguindo o padrão de Versionamento Semântico
+        # MAJOR.MINOR.PATCH-SUFIX
+        self.version_label = QLabel("Ver. 0.1.2-beta", self)
+        self.version_label.setAlignment(Qt.AlignCenter)
+        self.control_layout.addWidget(self.version_label)
+
         # -------------------------------------------------------------------------------------------------------------
 
         # Associa as funções de controle aos botões criados
@@ -239,14 +245,13 @@ class VideoPlayer(QMainWindow):
         self.speed_slider.valueChanged.connect(self.change_speed)
         self.change_keys.clicked.connect(self.key_mapping)
 
-        # -----------------
         self.capture_frame_btn.clicked.connect(self.frame_capture)
-        # -----------------
 
         self.save_menu.clicked.connect(self.open_save_menu)
 
-        # Timer responsável por atualizar a barra de progresso
+        # -------------------------------------------------------------------------------------------------------------
 
+        # Timer responsável por atualizar a barra de progresso
         self.timer = QTimer(self)  # Cria uma instância do temporizador
         self.timer.setInterval(500)  # Define um intervalo de tempo de 500ms
         self.timer.timeout.connect(self.update_slider)  # O slider é atualizado a cada 500ms, utilizando a fução update
@@ -291,13 +296,23 @@ class VideoPlayer(QMainWindow):
 
         model = Model()
         self.file_name = model.open_video(parent=self)
+        valid_extensions = ['.mp4', '.mov']
 
         if self.file_name:
-            self.start_video(self.file_name)
+
             self.video_name = os.path.basename(self.file_name)
             self.extension = self.video_name[-4:]
             print(self.extension)
             self.video_name = self.video_name[:-4]
+
+            if self.extension in valid_extensions:
+                self.start_video(self.file_name)
+            else:
+                QMessageBox.information(self, 'Formato Inválido', 'Formato de vídeo inválido.'
+                                                                  ' Selecione arquivos nos formatos'
+                                                                  ' ".mp4" ou ".mov" apenas!')
+                return 0
+
 
     def start_video(self, file_name):
 
@@ -362,7 +377,6 @@ class VideoPlayer(QMainWindow):
             new_time = max(0, current_time - frame_time)  # Garante que não vá abaixo de 0
             self.media_player.set_time(new_time)  # Define o novo tempo
 
-    # --------------------------------------
     def frame_capture(self):
 
         # Pausa o vídeo, caso ele já não esteja pausado

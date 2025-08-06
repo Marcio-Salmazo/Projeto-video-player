@@ -1,6 +1,9 @@
 # Classe responsável pela janela de configuração da atribuição de teclas
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QHBoxLayout, QLabel, QLineEdit, QDialog, QVBoxLayout, QWidget, QPushButton
+
+from Model import Model
 
 
 class KeyMapper(QDialog):
@@ -10,6 +13,10 @@ class KeyMapper(QDialog):
 
         self.setWindowTitle("Mapear teclas de atalho")
         self.setGeometry(100, 100, 250, 120)
+
+        # Definindo um ícone para a janela
+        model = Model()
+        self.setWindowIcon(QIcon(model.resource_path("figures/fig_keyboard.png")))
 
         # Layout principal do QDialog
         # Em um QDialog, para que os widgets apareçam, é necessário

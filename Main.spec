@@ -5,8 +5,8 @@ a = Analysis(
     ['Main.py'],
     pathex=[],
     binaries=[],
-    datas=[('libvlc.dll', '.'), ('libvlccore.dll', '.'), ('plugins', 'plugins')],
-    hiddenimports=['cv2', 'PyQt5.QtWidgets', 'PyQt5.QtGui', 'PyQt5.QtCore'],
+    datas=[('libvlc.dll', '.'), ('libvlccore.dll', '.'), ('Dependencias.bat', '.'), ('plugins', 'plugins'), ('figures', 'figures')],
+    hiddenimports=['cv2', 'PyQt5', 'PyQt5.QtWidgets', 'PyQt5.QtGui', 'PyQt5.QtCore'],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
@@ -35,4 +35,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon=['figures\\icon_mouse.ico'],
 )

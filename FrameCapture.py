@@ -1,7 +1,7 @@
 import os
 
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QScrollArea, QWidget, QMessageBox
-from PyQt5.QtGui import QPixmap, QImage, QPainter, QPen
+from PyQt5.QtGui import QPixmap, QImage, QPainter, QPen, QIcon
 from PyQt5.QtCore import Qt, QRect, QPoint
 import cv2
 import numpy as np
@@ -18,6 +18,10 @@ class FrameCapture(QDialog):
         self.setWindowTitle("Capturar frame")  # Define o título da janela
         self.setGeometry(150, 150, 800, 600)  # Define as dimensões da janela
         self.layout = QVBoxLayout(self)  # Define o layout principal da janela
+
+        # Definindo um ícone para a janela
+        model = Model()
+        self.setWindowIcon(QIcon(model.resource_path("figures/fig_capture.png")))
 
         self.scroll_area = QScrollArea(self)  # Define uma área de scroll (rolagem)
         self.scroll_widget = QWidget()  # Define um widget central para a área de rolagem
@@ -93,15 +97,21 @@ class FrameCapture(QDialog):
         # Correção de cores do frame, convertendo de BGR para RGB
         frame = cv2.cvtColor(self.frame, cv2.COLOR_BGR2RGB)
 
+        '''
         # Realiza uma rotação da imagem em 90 graus caso sua extensão seja .mov
         # Por algum motivo, tal extensão realiza uma rotação indesejada
         if self.extension and '.mov' in self.extension:
             frame = cv2.rotate(frame, cv2.ROTATE_90_COUNTERCLOCKWISE)
+        '''
+
+        # Realiza uma rotação da imagem em 90 graus caso sua extensão seja .mov
+        # Por algum motivo, tal extensão realiza uma rotação indesejada
+        frame = cv2.rotate(frame, cv2.ROTATE_90_COUNTERCLOCKWISE)
 
         # Recebe as informações de forma da imagem e define um valor de escala a fim de
         # reduzir o tamanho da imagem para a exibição na área de rolagem
         T_height, T_width, T_channel = frame.shape
-        self.scale_factor = 0.7
+        self.scale_factor = 0.9
 
         # Redimensiona a imagem de acordo com o fator de escala préviamente definido
         # Após o tratamento do frame, uma qImage é gerado a partir do frame tratado
@@ -186,8 +196,8 @@ class FrameCapture(QDialog):
 
         # Atribui as coordenadas x e y, de acordo com o retorno das funções selection_start e selection_end
         # x1 obtém um offset (-30) a fim de manter a precisão da seleção em razão do fator de escala
-        self.x1 = self.selection_start.x() - 30
-        self.y1 = self.selection_start.y()
+        self.x1 = self.selection_start.x()
+        self.y1 = self.selection_start.y() - 30
         self.x2 = self.selection_end.x()
         self.y2 = self.selection_end.y()
 

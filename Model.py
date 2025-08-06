@@ -1,5 +1,8 @@
 import os
 import json
+import sys
+import subprocess
+import importlib
 import cv2
 import numpy as np
 from PyQt5.QtWidgets import QFileDialog
@@ -11,6 +14,11 @@ class Model:
 
         # Inicialização do caminho dos arquivos JSON para augmentation
         self.json_file_path = None
+
+    def resource_path(self, relative_path):
+        """ Retorna o caminho absoluto para o arquivo, compatível com PyInstaller """
+        base_path = getattr(sys, '_MEIPASS', os.path.abspath("."))
+        return os.path.join(base_path, relative_path)
 
     def manage_dirs(self, folder_name):
 
@@ -45,7 +53,7 @@ class Model:
         # "Arquivos de Vídeo (*.mp4 *.avi *.mkv)" - Filtro para exibir apenas arquivos de vídeo.
 
         # INTERFACE
-        file_name, _ = QFileDialog.getOpenFileName(parent, "Abrir Vídeo", "", "Arquivos de Vídeo (*.mp4 *.avi *.mkv "
+        file_name, _ = QFileDialog.getOpenFileName(parent, "Abrir Vídeo", "", "Arquivos de Vídeo (*.mp4 "
                                                                               "*.mov)")
 
         return file_name
@@ -112,6 +120,41 @@ class Model:
                     print(f"Imagem duplicada encontrada e removida: {img_path}")
                     os.remove(img_path)  # Remove a imagem duplicada
                     return True
+
+    def check_and_install_packages(self):
+
+        # Lista de pacotes a serem verificados
+        # para a plena execução do programa
+        # no momento compilado do pyInstaller
+        required_packages = {
+            "cv2": "opencv-python",
+            "PyQt5": "PyQt5",
+            "numpy": "numpy",
+            "vlc": "python-vlc"
+        }
+        missing_packages = []
+
+        # Verifica se os pacotes estão disponíveis
+        for module_name, pip_name in required_packages.items():
+            try:
+                importlib.import_module(module_name)
+            except ImportError:
+                missing_packages.append(pip_name)
+
+        if missing_packages:
+
+            # Caminho absoluto para o .bat (suporta onefile do PyInstaller)
+            bat_path = self.resource_path("Dependencias.bat")
+
+            try:
+                subprocess.call([bat_path], shell=True)
+                print("Script de dependências executado.")
+                # Encerrar o programa para o usuário reiniciar
+                sys.exit("Dependências sendo instaladas. Reinicie o aplicativo.")
+
+            except Exception as e:
+                print(f"Erro ao executar o .bat: {e}")
+                sys.exit(1)
 
     # ------------------------------------------------------------------------------------------------------------------
     #    FUNÇÕES REFERENTES AO TRATAMENTO DE DADOS DE AUGMENTATION

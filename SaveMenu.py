@@ -1,4 +1,4 @@
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QScrollArea, QWidget, QPushButton, QLabel, QGridLayout
 
 from Model import Model
@@ -14,6 +14,10 @@ class SaveMenu(QDialog):
 
         self.setWindowTitle("Menu de salvamento")  # Define o título da janela
         self.setGeometry(150, 150, 800, 600)  # Define as dimensões da janela criada
+
+        # Definindo um ícone para a janela
+        model = Model()
+        self.setWindowIcon(QIcon(model.resource_path("figures/fig_save_menu.png")))
 
         # Layout principal do QDialog
         # Em um QDialog, para que os widgets apareçam, é necessário

@@ -1,0 +1,1 @@
+pyinstaller --onefile --noconsole --icon="figures/icon_mouse.ico" --add-data "libvlc.dll;." --add-data "libvlccore.dll;." --add-data "Dependencias.bat;." --add-data "plugins;plugins" --add-data "figures;figures" --hidden-import=cv2  --hidden-import=PyQt5 --hidden-import=PyQt5.QtWidgets --hidden-import=PyQt5.QtGui --hidden-import=PyQt5.QtCore Main.py
