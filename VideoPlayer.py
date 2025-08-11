@@ -228,7 +228,7 @@ class VideoPlayer(QMainWindow):
         # Inserção de label para definir a versão do software
         # Seguindo o padrão de Versionamento Semântico
         # MAJOR.MINOR.PATCH-SUFIX
-        self.version_label = QLabel("Ver. 0.1.2-beta", self)
+        self.version_label = QLabel("Ver. 0.1.3-beta", self)
         self.version_label.setAlignment(Qt.AlignCenter)
         self.control_layout.addWidget(self.version_label)
 
@@ -296,7 +296,7 @@ class VideoPlayer(QMainWindow):
 
         model = Model()
         self.file_name = model.open_video(parent=self)
-        valid_extensions = ['.mp4', '.mov']
+        valid_extensions = ['.mp4', '.mov', '.MOV']
 
         if self.file_name:
 

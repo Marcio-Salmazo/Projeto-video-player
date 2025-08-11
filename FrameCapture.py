@@ -97,30 +97,33 @@ class FrameCapture(QDialog):
         # Correção de cores do frame, convertendo de BGR para RGB
         frame = cv2.cvtColor(self.frame, cv2.COLOR_BGR2RGB)
 
-        '''
-        # Realiza uma rotação da imagem em 90 graus caso sua extensão seja .mov
-        # Por algum motivo, tal extensão realiza uma rotação indesejada
-        if self.extension and '.mov' in self.extension:
-            frame = cv2.rotate(frame, cv2.ROTATE_90_COUNTERCLOCKWISE)
-        '''
-
-        # Realiza uma rotação da imagem em 90 graus caso sua extensão seja .mov
+        # Realiza uma rotação da imagem em 90 graus
         # Por algum motivo, tal extensão realiza uma rotação indesejada
         frame = cv2.rotate(frame, cv2.ROTATE_90_COUNTERCLOCKWISE)
 
         # Recebe as informações de forma da imagem e define um valor de escala a fim de
-        # reduzir o tamanho da imagem para a exibição na área de rolagem
+        # reduzir ou aumentar o tamanho da imagem para a exibição na área de rolagem
         T_height, T_width, T_channel = frame.shape
-        self.scale_factor = 0.9
 
-        # Redimensiona a imagem de acordo com o fator de escala préviamente definido
-        # Após o tratamento do frame, uma qImage é gerado a partir do frame tratado
-        # A qImage É uma classe do Qt que representa imagens em memória, ou seja, ela armazena os dados brutos
-        # de uma imagem, como largura, altura, formato (RGB, ARGB, etc.) e os pixels.
-        self.frameResized = cv2.resize(frame, (int(T_width * self.scale_factor), int(T_height * self.scale_factor)),
-                                       interpolation=cv2.INTER_AREA)
+        target_width = 896
+        target_height = 504
+
+        scale_w = target_width / T_width
+        scale_h = target_height / T_height
+        scale_factor = min(scale_w, scale_h)
+
+        # Redimensiona
+        new_width = int(T_width * scale_factor)
+        new_height = int(T_height * scale_factor)
+        self.frameResized = cv2.resize(frame, (new_width, new_height), interpolation=cv2.INTER_AREA)
+
+        # Reconstrói a imagem passando ela para uma QImage
         height, width, channel = self.frameResized.shape
         bytes_per_line = 3 * width
+
+        if T_width < T_height:
+            frame = cv2.rotate(self.frameResized, cv2.ROTATE_90_COUNTERCLOCKWISE)
+
         qimage = QImage(self.frameResized.data, width, height, bytes_per_line, QImage.Format_RGB888)
 
         # Validação se a qImage gerada é (ou não) válida
@@ -197,7 +200,7 @@ class FrameCapture(QDialog):
         # Atribui as coordenadas x e y, de acordo com o retorno das funções selection_start e selection_end
         # x1 obtém um offset (-30) a fim de manter a precisão da seleção em razão do fator de escala
         self.x1 = self.selection_start.x()
-        self.y1 = self.selection_start.y() - 30
+        self.y1 = self.selection_start.y()
         self.x2 = self.selection_end.x()
         self.y2 = self.selection_end.y()
 
