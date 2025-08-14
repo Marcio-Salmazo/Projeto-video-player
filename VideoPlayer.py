@@ -228,9 +228,13 @@ class VideoPlayer(QMainWindow):
         # Inserção de label para definir a versão do software
         # Seguindo o padrão de Versionamento Semântico
         # MAJOR.MINOR.PATCH-SUFIX
-        self.version_label = QLabel("Ver. 0.1.3-beta", self)
+        self.version_label = QLabel("Ver. 0.2.0-beta", self)
         self.version_label.setAlignment(Qt.AlignCenter)
         self.control_layout.addWidget(self.version_label)
+        # Implementações dessa versão:
+        # Botão para inverter imagem verticalmente na janela frame capture
+        # Correção de bugs referente ao nome das extensões (sempre minuscula)
+        # Limpeza de linhas de código desnecessárias
 
         # -------------------------------------------------------------------------------------------------------------
 
@@ -296,12 +300,12 @@ class VideoPlayer(QMainWindow):
 
         model = Model()
         self.file_name = model.open_video(parent=self)
-        valid_extensions = ['.mp4', '.mov', '.MOV']
+        valid_extensions = ['.mp4', '.mov', '.MOV', '.MP4']
 
         if self.file_name:
 
             self.video_name = os.path.basename(self.file_name)
-            self.extension = self.video_name[-4:]
+            self.extension = self.video_name[-4:].lower()
             print(self.extension)
             self.video_name = self.video_name[:-4]
 
@@ -400,8 +404,8 @@ class VideoPlayer(QMainWindow):
         height = self.media_player.video_get_height()
 
         if width == 0 or height == 0:
-            print("Erro: Nenhum vídeo carregado ou reprodução ainda não começou.")
-            return None
+            QMessageBox.information(self,'Erro','Nenhum vídeo carregado ou reprodução ainda não começou')
+            return 0
 
         # Define o caminho do snapshot temporário
         snapshot_path = "temp_frame.png"
@@ -415,7 +419,7 @@ class VideoPlayer(QMainWindow):
             os.remove(snapshot_path)  # Remove o arquivo temporário
 
             # Corrige a rotação (gira 90° no sentido horário)
-            frame = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
+            #frame = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
             return frame
         else:
             print("Erro ao capturar o frame.")

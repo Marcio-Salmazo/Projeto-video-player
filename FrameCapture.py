@@ -1,7 +1,7 @@
 import os
 
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QScrollArea, QWidget, QMessageBox
-from PyQt5.QtGui import QPixmap, QImage, QPainter, QPen, QIcon
+from PyQt5.QtGui import QPixmap, QImage, QPainter, QPen, QIcon, QTransform
 from PyQt5.QtCore import Qt, QRect, QPoint
 import cv2
 import numpy as np
@@ -31,6 +31,7 @@ class FrameCapture(QDialog):
         self.layout.addWidget(self.scroll_area)  # Atribui a área de rolagem ao layout principal da JANELA
 
         self.hor_layout = QHBoxLayout()  # Criação de um layout horizontal para a disposição dos botões
+        self.hor_layout2 = QHBoxLayout()  # Criação de um layout horizontal para a disposição de botões
         self.image_label = QLabel()  # Define um label para inserir a imagem do frame a ser capturado
         self.frame = frame  # Recebe o frame a ser capturado
         self.scroll_layout.addWidget(self.image_label)  # Atribui o label da imagem à área de rolagem
@@ -50,8 +51,13 @@ class FrameCapture(QDialog):
 
         #  Criação, atribuição e função do botão de fechar a janela
         self.close_btn = QPushButton("Concluir")
-        self.layout.addWidget(self.close_btn)
+        self.hor_layout2.addWidget(self.close_btn)
         self.close_btn.clicked.connect(self.close)
+
+        self.btn_inverter = QPushButton("Inverter imagem 180")
+        self.hor_layout2.addWidget(self.btn_inverter)
+
+        self.layout.addLayout(self.hor_layout2)
 
         # Inicialização da variáveis globais proveniente dos parâmetros do contrutor
         self.video_name = video_name
@@ -74,6 +80,7 @@ class FrameCapture(QDialog):
         self.save_pd.clicked.connect(lambda: self.capture_frame("Pouca dor"))
         self.save_md.clicked.connect(lambda: self.capture_frame("Muita dor"))
         self.save_inc.clicked.connect(lambda: self.capture_frame("Incerto"))
+        self.btn_inverter.clicked.connect(self.invert_image_vertical)
 
         # Variáveis globais referentes à manipulação dos frames
         self.scale_factor = None
@@ -99,7 +106,7 @@ class FrameCapture(QDialog):
 
         # Realiza uma rotação da imagem em 90 graus
         # Por algum motivo, tal extensão realiza uma rotação indesejada
-        frame = cv2.rotate(frame, cv2.ROTATE_90_COUNTERCLOCKWISE)
+        #frame = cv2.rotate(frame, cv2.ROTATE_90_COUNTERCLOCKWISE)
 
         # Recebe as informações de forma da imagem e define um valor de escala a fim de
         # reduzir ou aumentar o tamanho da imagem para a exibição na área de rolagem
@@ -121,9 +128,6 @@ class FrameCapture(QDialog):
         height, width, channel = self.frameResized.shape
         bytes_per_line = 3 * width
 
-        if T_width < T_height:
-            frame = cv2.rotate(self.frameResized, cv2.ROTATE_90_COUNTERCLOCKWISE)
-
         qimage = QImage(self.frameResized.data, width, height, bytes_per_line, QImage.Format_RGB888)
 
         # Validação se a qImage gerada é (ou não) válida
@@ -141,6 +145,24 @@ class FrameCapture(QDialog):
             return
 
         # Atribui o pixmap criado ao label gerado préviamente para a exibição do frame
+        self.image_label.setPixmap(self.pixmap)
+        self.image_label.setAlignment(Qt.AlignCenter)
+        self.original_pixmap = self.pixmap.copy()
+
+    def invert_image_vertical(self):
+
+        if not hasattr(self, "pixmap") or self.pixmap.isNull():
+            print("Nenhuma imagem carregada para inverter!")
+            return
+
+        # Espelha verticalmente
+        transform = QTransform().scale(1, -1)  # flip vertical
+        self.pixmap = self.pixmap.transformed(transform)
+
+        #Atualiza o frame
+        self.frameResized = cv2.flip(self.frameResized, 0)  # 0 = flip vertical
+
+        # Atualiza no label
         self.image_label.setPixmap(self.pixmap)
         self.image_label.setAlignment(Qt.AlignCenter)
         self.original_pixmap = self.pixmap.copy()
