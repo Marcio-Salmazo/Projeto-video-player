@@ -228,7 +228,7 @@ class VideoPlayer(QMainWindow):
         # Inserção de label para definir a versão do software
         # Seguindo o padrão de Versionamento Semântico
         # MAJOR.MINOR.PATCH-SUFIX
-        self.version_label = QLabel("Ver. 0.2.0-beta", self)
+        self.version_label = QLabel("Ver. 0.2.1-beta", self)
         self.version_label.setAlignment(Qt.AlignCenter)
         self.control_layout.addWidget(self.version_label)
         # Implementações dessa versão:
@@ -418,12 +418,10 @@ class VideoPlayer(QMainWindow):
             frame = cv2.imread(snapshot_path)  # Carrega a imagem com OpenCV
             os.remove(snapshot_path)  # Remove o arquivo temporário
 
-            # Corrige a rotação (gira 90° no sentido horário)
-            #frame = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
             return frame
         else:
-            print("Erro ao capturar o frame.")
-            return None
+            QMessageBox.information(self,'Erro', 'Erro ao capturar o frame')
+            return 0
 
     def change_speed(self):
 

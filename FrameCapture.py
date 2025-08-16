@@ -98,8 +98,8 @@ class FrameCapture(QDialog):
         # Validação se o frame a ser exibido é ou não válido para a exibição
         # Valida se o frame é vazio ou se ele é uma instância do frame
         if self.frame is None or not isinstance(self.frame, np.ndarray):
-            print("Erro: frame inválido!")
-            return
+            QMessageBox.information(self,'Erro', 'Frame inválido ou objeto não instanciado')
+            return 0
 
         # Correção de cores do frame, convertendo de BGR para RGB
         frame = cv2.cvtColor(self.frame, cv2.COLOR_BGR2RGB)
@@ -132,8 +132,8 @@ class FrameCapture(QDialog):
 
         # Validação se a qImage gerada é (ou não) válida
         if qimage.isNull():
-            print("Erro: QImage não foi criado corretamente!")
-            return
+            QMessageBox.information(self,'Erro', 'QImage não foi criado corretamente e se apresenta como NULL')
+            return 0
 
         # Cria um pixmap a partir da qImage gerada
         # qPixmap é uma classe otimizada para exibição gráfica de imagens em componentes da interface
@@ -141,8 +141,8 @@ class FrameCapture(QDialog):
         # sendo mais leve e rápido para desenhar na tela.
         self.pixmap = QPixmap.fromImage(qimage)
         if self.pixmap.isNull():
-            print("Erro: QPixmap não foi criado corretamente!")
-            return
+            QMessageBox.information(self,'Erro', 'QPixmap não foi criado corretamente!')
+            return 0
 
         # Atribui o pixmap criado ao label gerado préviamente para a exibição do frame
         self.image_label.setPixmap(self.pixmap)
@@ -152,8 +152,8 @@ class FrameCapture(QDialog):
     def invert_image_vertical(self):
 
         if not hasattr(self, "pixmap") or self.pixmap.isNull():
-            print("Nenhuma imagem carregada para inverter!")
-            return
+            QMessageBox.information(self,'Erro', 'Nenhuma imagem foi carregada para ser invertida')
+            return 0
 
         # Espelha verticalmente
         transform = QTransform().scale(1, -1)  # flip vertical
@@ -205,8 +205,8 @@ class FrameCapture(QDialog):
 
         # Valida as condições necessárias para prosseguir com o desenho de seleção
         if self.original_pixmap is None or self.selection_start is None or self.selection_end is None:
-            print("Pixmap ou área de seleção inválidos")
-            return
+            QMessageBox.information(self,'Erro', 'Pixmap ou área de seleção inválidos')
+            return 0
 
         # Cópia do pixmap, a fim de evitar modificações na instãncia original
         temp_pixmap = self.original_pixmap.copy()
@@ -271,8 +271,8 @@ class FrameCapture(QDialog):
 
         # Valida se há ou não uma área de seleção bem como a existência de um frame antes de prosseguir a captura
         if self.selection_start is None or self.selection_end is None or self.frameResized is None:
-            print("Erro: Nenhuma área selecionada para salvar.")
-            return
+            QMessageBox.information(self, 'Erro', 'Nenhuma área selecionada para salvar')
+            return 0
 
         # Recortar a região selecionada na imagem original
         color_correction = cv2.cvtColor(self.frameResized, cv2.COLOR_BGR2RGB)
@@ -280,8 +280,8 @@ class FrameCapture(QDialog):
 
         # Valida se a área recortada possui um tamanho válido
         if selected_area.size == 0:
-            print("Erro: área selecionada inválida!")
-            return
+            QMessageBox.information(self, 'Erro', 'Área selecionada é inválida')
+            return 0
 
         # Cria uma flag para avaliar se a área do frame selecionada na imagem já foi previamente salva
         # em algumas das possíveis categorias. Caso alguma imagem duplicada seja encontrada, ela é removida

@@ -1,5 +1,5 @@
 from PyQt5.QtGui import QPixmap, QIcon
-from PyQt5.QtWidgets import QDialog, QVBoxLayout, QScrollArea, QWidget, QPushButton, QLabel, QGridLayout
+from PyQt5.QtWidgets import QDialog, QVBoxLayout, QScrollArea, QWidget, QPushButton, QLabel, QGridLayout, QMessageBox
 
 from Model import Model
 
@@ -191,6 +191,8 @@ class SaveMenu(QDialog):
 
         except Exception as e:  # Em caso de erro
             print(f"Erro ao excluir {img_path}: {e}")
+            QMessageBox.information(self, 'Erro', 'Erro ao remover a imagem')
+            return 0
 
         # Função para deletar os dados JSON de um frame excluido
         model.Augmentation_data_delete(img_path)
