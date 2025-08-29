@@ -187,12 +187,14 @@ class SaveMenu(QDialog):
         model = Model()
         try:
             model.remove_file(img_path)  # Remove o arquivo
+            model.Augmentation_data_delete(img_path) # Função para deletar os dados JSON de um frame excluido
             self.load_images()  # Recarrega a interface após a exclusão
+
+            QMessageBox.information(self, 'Resultado', 'Imagem excluída com sucesso do diretório e do '
+                                                       'arquivo de Augmentation')
+            return 0
 
         except Exception as e:  # Em caso de erro
             print(f"Erro ao excluir {img_path}: {e}")
             QMessageBox.information(self, 'Erro', 'Erro ao remover a imagem')
             return 0
-
-        # Função para deletar os dados JSON de um frame excluido
-        model.Augmentation_data_delete(img_path)

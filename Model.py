@@ -1,4 +1,5 @@
 import os
+import hashlib
 import json
 import sys
 import subprocess
@@ -6,6 +7,7 @@ import importlib
 import cv2
 import numpy as np
 from PyQt5.QtWidgets import QFileDialog
+
 
 
 class Model:
@@ -87,6 +89,7 @@ class Model:
         # validado, ele será apenas ignorado
         return image_path.lower().endswith(('.png', '.jpg'))
 
+    '''
     def check_existence(self, frame):
 
         # Função responsável por verificar se um frame a ser salvo já existe
@@ -116,10 +119,44 @@ class Model:
 
                 # Valida se a imagem a ser salva já existe (tendo sido salva préviamente)
                 # Em caso afirmativo, o frame salvo previamente é excluído
+                
                 if saved_image.shape == frame.shape and np.array_equal(saved_image, frame):
                     print(f"Imagem duplicada encontrada e removida: {img_path}")
                     os.remove(img_path)  # Remove a imagem duplicada
                     return True
+
+        return False
+    '''
+
+    def check_existence(self, frame):
+
+        # Função responsável por verificar se um frame a ser salvo já existe
+        # dentro de alguma das pastas de classificação definida por 'folders'
+        folders = ["Indolor", "Pouca dor", "Muita dor", "Incerto"]
+
+        # Calcula hash do frame atual
+        frame_hash = hashlib.md5(frame.tobytes()).hexdigest()
+
+        # Percorre cada pasta
+        for folder in folders:
+
+            if not os.path.exists(folder):
+                continue
+
+            for img_file in os.listdir(folder):
+
+                # Caminho completo do arquivo
+                img_path = os.path.join(folder, img_file)
+                saved_image = cv2.imread(img_path)
+                saved_hash = hashlib.md5(saved_image.tobytes()).hexdigest()
+
+                if frame_hash == saved_hash:
+                    print(f"Imagem duplicada detectada: {img_path}")
+                    os.remove(img_path)  # Remove a imagem duplicada
+                    return True  # já existe
+
+        return False  # não existe ainda
+    
 
     def check_and_install_packages(self):
 
@@ -236,6 +273,7 @@ class Model:
         else:
             print("Dados duplicados ignorados")
 
+    '''
     def Augmentation_data_checker(self, new_data):
 
         # Função responsável por validar se um registro a ser salvo já existe
@@ -291,6 +329,49 @@ class Model:
             # Salva de volta o JSON
             with open(json_path, "w", encoding="utf-8") as file:
                 json.dump(novos_dados, file, indent=4, ensure_ascii=False)
+    '''
+
+    def record_hash(self, record: dict) -> str:
+        """Cria um hash MD5 do registro (ignorando 'caminho')."""
+        filtered = {k: v for k, v in record.items() if k != "caminho"}
+        return hashlib.md5(json.dumps(filtered, sort_keys=True).encode("utf-8")).hexdigest()
+
+    def Augmentation_data_checker(self, new_data):
+        """
+        Verifica se new_data já existe nos arquivos JSON de Augmentation.
+        Remove duplicatas e retorna True se já existia, False caso contrário.
+        """
+        folders = ["Indolor", "Pouca dor", "Muita dor", "Incerto"]
+        new_hash = self.record_hash(new_data)
+        found = False
+
+        for dirs in folders:
+            if not os.path.exists(dirs):
+                continue
+
+            json_path = os.path.join("Augmentation", dirs, f"Augmentation_{dirs}.json")
+
+            # Carregar dados existentes
+            if os.path.exists(json_path) and os.path.getsize(json_path) > 0:
+                with open(json_path, "r", encoding="utf-8") as file:
+                    dados = json.load(file)
+            else:
+                dados = []
+
+            # Criar lista sem duplicatas
+            novos_dados = []
+            for registro in dados:
+                if  self.record_hash(registro) == new_hash:
+                    found = True
+                else:
+                    novos_dados.append(registro)
+
+            # Salvar de volta apenas se mudou
+            if len(novos_dados) != len(dados):
+                with open(json_path, "w", encoding="utf-8") as file:
+                    json.dump(novos_dados, file, indent=4, ensure_ascii=False)
+
+        return found
 
     def Augmentation_data_delete(self, image_path):
 

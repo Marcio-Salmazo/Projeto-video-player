@@ -286,12 +286,20 @@ class FrameCapture(QDialog):
         # Cria uma flag para avaliar se a área do frame selecionada na imagem já foi previamente salva
         # em algumas das possíveis categorias. Caso alguma imagem duplicada seja encontrada, ela é removida
         # salvando apenas o frame atual na categoria atual selecionada
+        if selected_area is None:
+            print("Erro: área selecionada é None")
         flag = model.check_existence(selected_area)
         # Caso o frame não seja encontrado e duplicadom, o index é incrementado
         # O frameIndex, define o valor do subframe (trecho da imagem) recortado
         # ex: frame1_recorte1, frame1_recorte2, frame1_recorte3, etc.
+
+        print('Flag', flag)
+
         if not flag:
             self.frameIndex += 1
+        else:
+            QMessageBox.information(self, 'Erro', 'Frame selecionado já foi préviamente salvo, apenas o '
+                                                  'salvamento atual foi mantido')
 
         # Gerar o caminho do frame a ser salvo, levando em consideração o numero do frme,
         # nome da pasta, nome do vídeo e índice do recorte
