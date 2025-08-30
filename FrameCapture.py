@@ -288,7 +288,7 @@ class FrameCapture(QDialog):
         # salvando apenas o frame atual na categoria atual selecionada
         if selected_area is None:
             print("Erro: área selecionada é None")
-        flag = model.check_existence(selected_area)
+        flag = model.check_existence(selected_area, self.video_name)
         # Caso o frame não seja encontrado e duplicadom, o index é incrementado
         # O frameIndex, define o valor do subframe (trecho da imagem) recortado
         # ex: frame1_recorte1, frame1_recorte2, frame1_recorte3, etc.
@@ -318,13 +318,13 @@ class FrameCapture(QDialog):
             # Calcula o valor do frame, baseado no tempo atual e na taxa de quadros
             frame_number = int((self.current_time / 1000) * self.fps)
 
+            aug_list = []
             # O 'for' busca obter os 10 frames anteriores e posteriores
             # ao frame atual, afim de salvar seus dados para o processo
             # de Augmentation futuro
             for i in range(-10, 11):
-
                 if frame_number + i >= 1 and i != 0:
-                    # Retorna a estrutura dos dados em formato JSON
+                # Retorna a estrutura dos dados em formato JSON
                     aug_data = model.Augmentation_data_structure(frame_number + i,
                                                                  self.x1,
                                                                  self.x2,
@@ -332,13 +332,13 @@ class FrameCapture(QDialog):
                                                                  self.y2,
                                                                  self.video_name,
                                                                  frame_path)
+                    aug_list.append(aug_data)
 
-                    # Valida se o novo registro já existe ou não em alguma das outras pastas
-                    # O registro é excluido em caso de ser duplicado
-                    model.Augmentation_data_checker(aug_data)
+            # Verifica duplicatas nas pastas de augmentation e as exclui em caso afirmativo
+            model.Augmentation_data_checker(aug_list)
 
-                    # Salva a estrutura JSON no arquivo gerado na pasta Augmentation
-                    model.Augmentation_data_save(aug_data, folder_name)
+            # Salva a estrutura JSON no arquivo gerado na pasta Augmentation
+            model.Augmentation_data_save(aug_list, folder_name)
 
             # Mensagem de confirmação da operação
             QMessageBox.information(self, "Sucesso", f"Frame salvo em: {frame_path}")

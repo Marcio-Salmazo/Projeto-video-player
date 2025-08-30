@@ -228,7 +228,7 @@ class VideoPlayer(QMainWindow):
         # Inserção de label para definir a versão do software
         # Seguindo o padrão de Versionamento Semântico
         # MAJOR.MINOR.PATCH-SUFIX
-        self.version_label = QLabel("Ver. 0.3.0-beta", self)
+        self.version_label = QLabel("Ver. 0.4.0-beta", self)
         self.version_label.setAlignment(Qt.AlignCenter)
         self.control_layout.addWidget(self.version_label)
         # Implementações dessa versão:

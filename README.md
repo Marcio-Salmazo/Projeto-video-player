@@ -124,9 +124,13 @@ Dependencias.bat
 
 ## 🆕 Atualizações / Changelog
 
+- **v0.4.0-beta**
+  - Otimização da captura de frames e atualização do arquivo JSON por meio de batches, agora toda a operação de verificação é feita apenas com arquivos referentes ao vídeo atual em reprodução
+  - Modificações consideráveis nas funções FrameCapture e Model
+
 - **v0.3.0-beta**
   - Otimização da captura de frames e atualização do arquivo JSON via hashcode
-  - Modificações consideráveis nas funções frameCapture e Augmentation_data_checker 
+  - Modificações consideráveis nas classes FrameCapture e Model
   
 - **v0.2.1-beta**
   - Inserção de `QMessageBox` para informar erros ao usuário  
