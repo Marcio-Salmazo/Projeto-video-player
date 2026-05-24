@@ -1,0 +1,7 @@
+# BIBLIOTECAS NECESSÁRIAS PARA A EXECUÇÃO DO PROJETO
+# EXECUTAR 'PIP INSTALL' VIA TERMINAL: 
+
+pyside6 
+opencv-python 
+numpy 
+pillow
