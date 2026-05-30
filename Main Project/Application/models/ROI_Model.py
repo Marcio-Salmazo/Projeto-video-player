@@ -3,8 +3,11 @@
     zona de interesse selecionada pelo usuário. Aqui são
     feitas as padronizações da ROI para futuro armazenamento
 
-    OBS: O decorador '@dataclass' simplifica a criação de classes
-         cujo principal objetivo é armazenar dados.
+    OBS: O decorador @dataclass, é usado para criar classes estruturadas
+         focadas principalmente no armazenamento de dados. Ele elimina a
+         necessidade de escrever código repetitivo ao gerar automaticamente
+         métodos essenciais, como __init__, __repr__ e __eq__.'''
+
     OBS: A classe apenas define e normaliza as coordenadas recebidas
          que constituem a ROI de um determinado frame
 """

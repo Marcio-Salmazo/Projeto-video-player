@@ -11,6 +11,7 @@ from PySide6.QtWidgets import QLabel
 from PySide6.QtGui import QPainter, QPen
 from PySide6.QtCore import Qt, QRect
 from ..models.ROI_Model import ROI_Model
+from ..models.Display_Info import DisplayInfo
 
 
 # Criação do Widget (herdando as propriedade de um QLabel)
@@ -26,6 +27,7 @@ class VideoWidget(QLabel):
         self.setAlignment(Qt.AlignCenter)
         self.setMinimumSize(800, 600)
 
+        # Coordenadas da ROI
         self.start_x = 0
         self.start_y = 0
         self.end_x = 0
@@ -35,13 +37,19 @@ class VideoWidget(QLabel):
         self.drawing = False
         # Região selecionada como ROI
         self.roi = None
+        # Dataclass para informações de Display
+        self.display_info = DisplayInfo()
 
-    # ==================================================================================================================
-    # Funções voltadas para avaliar e monitorar os comandos do Mouse
-    #       OBS: self.update() no contexto da GUI é usado para forçar a janela a redesenhar elementos,
-    #            processar eventos pendentes ou atualizar uma barra de progresso em tempo real.
-
+    # =================================================================
+    #       EVENTOS RELACIONADOS AO MONITORAMENTO DO MOUSE
+    # =================================================================
     def mousePressEvent(self, event):
+
+        if not self.point_inside_image(
+                event.position().x(),
+                event.position().y()
+        ):
+            return
 
         # Armazenamento das coordenadas iniciais no momento do clique
         self.start_x = event.position().x()
@@ -70,23 +78,20 @@ class VideoWidget(QLabel):
         # Atualiza a Flag
         self.drawing = False
 
-        # Define a zona de interesse com base no modelo padrão
-        self.roi = ROI_Model(
-            int(self.start_x),
-            int(self.start_y),
-            int(self.end_x),
-            int(self.end_y)
-        )
+        # Define a zona de interesse
+        # O ROI armazenado corresponde à coordenadas reais do vídeo
+        fx1, fy1 = self.widget_to_frame_coords(self.start_x, self.start_y)
+        fx2, fy2 = self.widget_to_frame_coords(self.end_x, self.end_y)
+        self.roi = ROI_Model(fx1,fy1,fx2,fy2)
+
         self.update()
 
-    # ==================================================================================================================
-
+    # =================================================================
+    #                     DESENHO DA ROI NA IMAGEM
+    # =================================================================
     def paintEvent(self, event):
         super().paintEvent(event)
 
-        # Função responsável por 'desenhar' a ROI no frame selecionado
-        # Inicia o desenhho apenas se houver um ROI definido ou se a Flag
-        # de desenho estiver ativa.
         if self.roi or self.drawing:
 
             # Criação e configuração do elemento de pintura
@@ -102,3 +107,34 @@ class VideoWidget(QLabel):
             )
 
             painter.drawRect(rect)
+
+    # =================================================================
+    #                      CONVERSÃO DE COORDENADAS
+    #                          Posição do mouse
+    #                                 ↓
+    #                      Posição na imagem escalada
+    #                                 ↓
+    #                       Posição no frame original
+    # =================================================================
+    def widget_to_frame_coords(self, x, y):
+
+        info = self.display_info
+
+        x -= info.offset_x
+        y -= info.offset_y
+
+        frame_x = int(x * info.scale_x)
+        frame_y = int(y * info.scale_y)
+
+        return frame_x, frame_y
+
+    # =================================================================
+    #         GARANTE QUE A SELEÇÃO ESTÁ DENTRO DA IMAGEM
+    # =================================================================
+    def point_inside_image(self, x, y):
+
+        return (
+                self.display_info.offset_x <= x <= self.display_info.offset_x + self.display_info.display_width
+                and
+                self.display_info.offset_y <= y <= self.display_info.offset_y + self.display_info.display_height
+        )

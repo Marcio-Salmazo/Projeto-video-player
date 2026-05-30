@@ -50,7 +50,7 @@ class MainWindow(QMainWindow):
         self.dataset_manager = DatasetManager()
         # self.controller = AppController(self)
         self.timer = QTimer()
-        self.timer.timeout.connect(self.play_video)
+        self.timer.timeout.connect(self.update_playback_frame)
         self.classes = [
             "pain",
             "no_pain",
@@ -59,9 +59,9 @@ class MainWindow(QMainWindow):
         self.dataset_manager.create_dataset_structure(self.classes)
         self.setup_ui()
 
-    # Função responsável pela configuração visual da Janela Principal.
-    # Os widgets são os componentes gráficos de interface de usuário (UI).
-    # Eles funcionam como os "blocos de construção" de uma aplicação.
+    # =================================================================
+    #            DEFINIÇÃO E ORGANIZAÇÃO DOS ELEMENTOS DE U.I
+    # =================================================================
     def setup_ui(self):
 
         # Widget central do UI
@@ -125,6 +125,9 @@ class MainWindow(QMainWindow):
         # Chama a função responsável por conectar cada botão à uma função do script
         self.connect_signals()
 
+    # =================================================================
+    #             CONEXÃO DOS ELEMENTOS DE U.I AOS MÉTODOS
+    # =================================================================
     def connect_signals(self):
 
         # Conexão dos botões à suas respectivas funções
@@ -135,6 +138,9 @@ class MainWindow(QMainWindow):
         self.next_button.clicked.connect(self.next_frame)
         self.save_button.clicked.connect(self.save_roi)
 
+    # =================================================================
+    #              CARREGAMENTO DO ARQUIVO DE VÍDEO
+    # =================================================================
     def open_video(self):
 
         # Função responsável por selecionar o arquivo de vídeo e limitar as extensões aceitas
@@ -144,49 +150,78 @@ class MainWindow(QMainWindow):
             "",
             "Videos (*.mp4 *.avi *.mov)"
         )
-
         # Chama a função para carregamento do arquivo no caminho indicado
         if path:
             self.video_manager.load_video(path)
-
         # Atualiza a exibição
         self.update_frame()
 
-    def update_frame(self):
-
-        # Obtem o frame atual do vídeo e valida se ele é válido (Não vazio)
-        frame = self.video_manager.get_frame()
+    # =================================================================
+    #                 RENDERIZAÇÃO DO FRAME NA JANELA
+    # =================================================================
+    def display_frame(self, frame):
         if frame is None:
             return
 
-        # Define o frame atual como uma cópia do frame obtido préviamente
+        # Define o frame atual como uma cópia do frame carregado
         # A cópia evita corrupções no frame original extraído
         self.current_frame = frame.copy()
-
         # Converte o frame para um formato compatível com Qt, no caso, um pixmap
         pixmap = convert_cv_to_qt(frame)
-        # O frame é redimensionado para caber no widget da interface do video_widget.
+        # O frame é redimensionado de acordo com o tamanho de video_widget.
         scaled = pixmap.scaled(
             self.video_widget.size(),
             Qt.KeepAspectRatio,
-            Qt.SmoothTransformation
+            Qt.FastTransformation
         )
+
+        # Instncia o objeto de informações referentes à coordenadas
+        info = self.video_widget.display_info
+
+        # Armazenar o tamanho do frame original
+        h, w = frame.shape[:2]
+        info.frame_width = w
+        info.frame_height = h
+
+        # Armazenar dimensões reais renderizadas
+        info.display_width = scaled.width()
+        info.display_height = scaled.height()
+
+        # Armazenar valores do offset para identificar onde a imagem está, dentro do widget.
+        info.offset_x = (self.video_widget.width() - scaled.width()) / 2
+        info.offset_y = (self.video_widget.height() - scaled.height()) / 2
+
+        # Chamada da função para exibir o Pixmap
         self.video_widget.setPixmap(scaled)
 
-    # ==================================================================================================================
+    # =================================================================
+    #                     CAPTURA MANUAL DO FRAME
+    # =================================================================
+    def update_frame(self):
+        frame = self.video_manager.get_frame_by_position()
+        self.display_frame(frame)
 
-    # Funções relacionadas às operações básicas do Player
-    # Utiliza operações definidas no Script Video_Manager do pacote SERVICES (Lógica operacional)
+    # =================================================================
+    #                  REPRODUÇÃO CONTÍNUA DE FRAMES
+    # =================================================================
+    def update_playback_frame(self):
+        frame = self.video_manager.read_next_frame()
+        if frame is None:
+            self.timer.stop()
+            return
+        self.display_frame(frame)
+
+    # =================================================================
+    #                  FUNÇÕES DE CONTROLE MANUAL
+    #         Utiliza operações definidas no Script Video_Manager,
+    #           contida no pacote SERVICES (Lógica operacional)
+    # =================================================================
     def start_video(self):
         interval = int(1000 / max(1, self.video_manager.fps))
         self.timer.start(interval)
 
     def pause_video(self):
         self.timer.stop()
-
-    def play_video(self):
-        self.video_manager.next_frame()
-        self.update_frame()
 
     def next_frame(self):
         self.video_manager.next_frame()
@@ -196,11 +231,9 @@ class MainWindow(QMainWindow):
         self.video_manager.previous_frame()
         self.update_frame()
 
-    # ==================================================================================================================
-
-    # Funções responsável pelo salvamento da ROI (Caso ela tenha sido definida)
-    # Utiliza operações definidas no Script Dataset_Manager do pacote STORAGE (Persistencia dos dados)
-
+    # =================================================================
+    #                       ARMAZENAMENTO DA ROI
+    # =================================================================
     def save_roi(self):
         if self.video_widget.roi is None:
             QMessageBox.warning(self, "Erro", "Nenhuma ROI selecionada")
