@@ -85,6 +85,17 @@ class VideoManager:
     # =================================================================
     def seek(self, frame_number):
         self.current_frame = frame_number
+        # Reseta a imagem atual (frame)
+        self.current_frame_image = None
 
     def get_current_frame_number(self):
         return self.current_frame
+
+    # =================================================================
+    #                 FORMATAÇÃO DO TEMPO DE VIDEO
+    # =================================================================
+    @staticmethod
+    def format_time(seconds):
+        minutes = int(seconds // 60)
+        seconds = int(seconds % 60)
+        return f"{minutes:02}:{seconds:02}"

@@ -15,7 +15,8 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QMessageBox,
-    QLabel
+    QLabel,
+    QSlider
 )
 from PySide6.QtCore import Qt, QTimer
 
@@ -42,6 +43,9 @@ class MainWindow(QMainWindow):
         self.open_button = None
         self.video_widget = None
         self.class_list = None
+        self.timeline_slider = None
+        self.frame_label = None
+        self.timeline_layout = None
 
         # Parâmetros PADRÕES do constrututor para criação da janela principal
         self.setWindowTitle("Dataset Annotation Tool")
@@ -89,6 +93,18 @@ class MainWindow(QMainWindow):
         left_layout.addWidget(class_label)
         left_layout.addWidget(self.class_list)
 
+        # Criação do QSlider para implemetação da barra de rolagem do vídeo
+        # Inicialização dos valores iniciais para a rolagem
+        self.timeline_slider = QSlider(Qt.Horizontal)
+        self.timeline_slider.setMinimum(0)
+        self.timeline_slider.setMaximum(0)
+        self.frame_label = QLabel("00:00")
+
+        # Layout para agregar os elementos do Slider
+        self.timeline_layout = QHBoxLayout()
+        self.timeline_layout.addWidget(self.timeline_slider)
+        self.timeline_layout.addWidget(self.frame_label)
+
         # Criação dos botões de controle
         self.open_button = QPushButton("Open Video")
         self.play_button = QPushButton("Play")
@@ -110,6 +126,8 @@ class MainWindow(QMainWindow):
 
         # Inserção do widget de vídeo no video_layout
         video_layout.addWidget(self.video_widget)
+        # Inserção do widget de slider no video_layout
+        video_layout.addLayout(self.timeline_layout)
         # Inserção do controls_layout no video_layout
         video_layout.addLayout(controls_layout)
         # OBS: video_layout contém tanto o widget de vídeo quanto todos
@@ -137,6 +155,39 @@ class MainWindow(QMainWindow):
         self.prev_button.clicked.connect(self.previous_frame)
         self.next_button.clicked.connect(self.next_frame)
         self.save_button.clicked.connect(self.save_roi)
+        # Pausa o video ao 'pressionar' o slider
+        self.timeline_slider.sliderPressed.connect(self.pause_video)
+        # Função chamada ao 'soltar' o slider em dada posição
+        self.timeline_slider.sliderReleased.connect(self.slider_released)
+
+    # =================================================================
+    #                    CONTROLADORES DO SLIDER
+    # =================================================================
+    def slider_released(self):
+        # Define o frame com base na posição do slider e atualiza a reprodução
+        frame_number = self.timeline_slider.value()
+        self.video_manager.seek(frame_number)
+        self.update_frame()
+        self.start_video()
+
+    # =================================================================
+    #                ATUALIZAÇÃO DO TEMPO DE VÍDEO
+    # =================================================================
+    def update_timeline(self):
+
+        # 'blockSignals' impede termporariamente que um Widget emita sinais.
+        # Esse comando evita que a atualização de valores ocorra de forma
+        # segura, sem gerar loops inconsistentes
+        self.timeline_slider.blockSignals(True)
+        self.timeline_slider.setValue(self.video_manager.current_frame)
+        self.timeline_slider.blockSignals(False)
+
+        # Atualiza a Label do slider sempre que um novo frame for exibido
+        current_time = (self.video_manager.current_frame / self.video_manager.fps)
+        total_time = (self.video_manager.total_frames / self.video_manager.fps)
+        current_video_time = VideoManager.format_time(current_time)
+        total_video_time = VideoManager.format_time(total_time)
+        self.frame_label.setText(f"{current_video_time} / {total_video_time}")
 
     # =================================================================
     #              CARREGAMENTO DO ARQUIVO DE VÍDEO
@@ -153,8 +204,11 @@ class MainWindow(QMainWindow):
         # Chama a função para carregamento do arquivo no caminho indicado
         if path:
             self.video_manager.load_video(path)
+            # Ao abrir o vídeo, o slider atualiza seu valor máximo com base no total de frames
+            self.timeline_slider.setMaximum(self.video_manager.total_frames - 1)
         # Atualiza a exibição
         self.update_frame()
+        self.start_video()
 
     # =================================================================
     #                 RENDERIZAÇÃO DO FRAME NA JANELA
@@ -193,6 +247,8 @@ class MainWindow(QMainWindow):
 
         # Chamada da função para exibir o Pixmap
         self.video_widget.setPixmap(scaled)
+        # Chamada da função para atualizar o tempo de vídeo
+        self.update_timeline()
 
     # =================================================================
     #                     CAPTURA MANUAL DO FRAME
@@ -209,7 +265,9 @@ class MainWindow(QMainWindow):
         if frame is None:
             self.timer.stop()
             return
+
         self.display_frame(frame)
+        self.update_timeline()
 
     # =================================================================
     #                  FUNÇÕES DE CONTROLE MANUAL
@@ -221,15 +279,20 @@ class MainWindow(QMainWindow):
         self.timer.start(interval)
 
     def pause_video(self):
-        self.timer.stop()
+        if self.timer.isActive():
+            self.timer.stop()
 
     def next_frame(self):
+        self.pause_video()
         self.video_manager.next_frame()
         self.update_frame()
+        self.update_timeline()
 
     def previous_frame(self):
+        self.pause_video()
         self.video_manager.previous_frame()
         self.update_frame()
+        self.update_timeline()
 
     # =================================================================
     #                       ARMAZENAMENTO DA ROI
