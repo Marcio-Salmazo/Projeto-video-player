@@ -1,143 +1,83 @@
-# 📸 Frame Capturer
+# 📸 Ferramenta Geradora de Datasets
 
-Aplicativo desenvolvido para **captura e categorização de frames em vídeos**, projetado especialmente para auxiliar pesquisadores da área de medicina veterinária na **produção de bases de dados de imagens de animais sob estímulos de dor**.
+Aplicativo desenvolvido em Python para viabilizar a extração, seleção e rotulagem de frames provenientes de arquivos de vídeo. Seu principal objetivo é apoiar a construção de conjuntos de dados estruturados e adequadamente anotados, etapa essencial para o treinamento, validação e avaliação de modelos computacionais voltados à detecção, classificação e quantificação automática de padrões visuais.
 
-O sistema permite a seleção manual de frames relevantes, definição de áreas de interesse e organização das imagens em categorias específicas, de forma simples e controlada, com suporte a atalhos de teclado e integração com VLC para reprodução de vídeos.
+O sistema integra recursos para reprodução de vídeos, navegação precisa entre quadros e categorização automatizada das imagens extraídas. Adicionalmente, disponibiliza mecanismos para definição de regiões de interesse (Regions of Interest — ROIs), extração direcionada de conteúdo visual e organização hierárquica dos arquivos gerados. Essas funcionalidades permitem padronizar o processo de anotação, reduzir o esforço operacional associado à curadoria dos dados e aumentar a eficiência na construção de bases de imagens destinadas a aplicações de visão computacional e aprendizado de máquina.
 
----
+## Dados pessoais
+**Nome:** Marcio Salmazo Ramos \
+**Redes sociais e contato:**
 
-## 🔎 Descrição Geral
+| [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/marcio-ramos-b94669235) | [![Instagram](https://img.shields.io/badge/-Instagram-%23E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/marcio.salmazo) | [![Gmail](https://img.shields.io/badge/Gmail-333333?style=for-the-badge&logo=gmail&logoColor=red)](mailto:contato.marcio.salmazo19@gmail.com) | [![GitHub](https://img.shields.io/badge/GitHub-0077B5?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Marcio-Salmazo) |
+|---|---|---|---|
 
-O **Frame Capturer** tem como objetivo:
-- Extrair imagens de arquivos de vídeo (`.mp4`, `.mov`);
-- Permitir que o usuário selecione manualmente frames relevantes;
-- Definir **recortes personalizados** dentro do frame para posterior análise;
-- Organizar os recortes automaticamente em categorias:  
-  - `Indolor`  
-  - `Pouca dor`  
-  - `Muita dor`  
-  - `Incerto`
 
-Destina-se principalmente a **pesquisadores em medicina veterinária**, mas pode ser utilizado em outros contextos que exijam análise manual de frames.
+## 📂 Estrutura do Repositório
 
----
 
-## 🖥️ Interface e Funcionalidades
+***O repositório está organizado em diretórios, de acordo com a seguinte estrutura:***
 
-### 📂 Janela Inicial
-- Área de reprodução de vídeos com suporte via `python-vlc`;
-- **Controles de reprodução**:
-  - ▶️ Play/Pause  
-  - ⏩ Avançar frame  
-  - ⏪ Retroceder frame  
-  - Barra de rolagem do vídeo  
-  - Controle de velocidade (0.25x, 0.5x, 1x, 2x, 4x)  
-- **Botões principais**:
-  - **Abrir vídeo** – carrega arquivos `.mp4` ou `.mov`;  
-  - **Capturar frame** – abre a janela de recorte e categorização;  
-  - **Menu de salvamento** – gerencia os recortes salvos;  
-  - **Escolher novas teclas de atalho** – remapeia atalhos de teclado;  
-  - **Fechar programa** – encerra a aplicação.  
+├── **Main Project/**\
+├── **Old Project Backup/**\
+├── **Documentation and notes.docx/**\
+├── **README**\
+└── ...
 
----
+- **Main Project/:** contém o código-fonte da versão atual da aplicação, desenvolvida a partir da reestruturação completa da implementação original. Esta versão adota uma arquitetura mais modular e escalável, priorizando a separação de responsabilidades, a manutenibilidade do código e a facilidade de extensão de funcionalidades futuras. O diretório concentra os componentes ativos do projeto, incluindo módulos de processamento, interface gráfica, gerenciamento de dados e demais recursos necessários à execução da ferramenta.
 
-### ✂️ Janela de Captura de Frame
-- Exibição do frame selecionado em área rolável;
-- Definição da **área de recorte** com salvamento automático nas categorias:
-  - Indolor  
-  - Pouca dor  
-  - Muita dor  
-  - Incerto
-- Funções adicionais:
-  - **Inverter imagem (180°)** – corrige orientação do frame quando necessário;
-  - **Concluir** – fecha a janela e retorna à tela inicial.  
+- **Old Project Backup/:** reúne a implementação original da aplicação, juntamente com arquivos auxiliares, versões históricas, materiais de suporte e documentação associada ao desenvolvimento inicial. Esta versão foi concebida antes da adoção de uma arquitetura modular e utilizava a biblioteca VLC como componente principal para reprodução dos vídeos. O código foi preservado para fins de referência, rastreabilidade do processo de desenvolvimento e comparação entre diferentes abordagens arquiteturais empregadas ao longo do projeto.
 
-> 🔎 **Observações Importantes**  
-> - Recortes só podem ser feitos da esquerda para a direita e de cima para baixo;
-> - Recortes se reajustam automaticamente para um formato quadrado (visando padronização)
-> - Arquivo `JSON` em `Augmentation/` armazena coordenadas dos recortes (10 frames vizinhos anteriores e posteriores);  
-> - **Não manipular manualmente** o diretório `Augmentation` ou recortes salvos via Explorer, para isso, utilizar o MENU DE SALVAMENTO.  
+- **Documentation and Notes.docx:** documento que agrega anotações técnicas, registros de desenvolvimento, estudos preliminares e decisões de projeto tomadas durante a implementação da ferramenta. O material inclui observações sobre estratégias adotadas, desafios encontrados, alternativas avaliadas e aspectos metodológicos relevantes para a evolução da aplicação, servindo como complemento à documentação formal do repositório.
 
----
-
-### 💾 Menu de Salvamento
-- Lista todos os recortes salvos relacionados ao vídeo em reprodução;
-- Permite **excluir recortes** (imagem + entrada no arquivo JSON);
-- Organização automática por categorias.
-
----
-
-### ⌨️ Atalhos de Teclado
-- `o` – Abrir vídeo  
-- `Espaço` – Play/Pause  
-- `s` – Avançar frame  
-- `a` – Retroceder frame  
-- `q` – Sair do programa  
-
-> ⚙️ Usuário pode redefinir os atalhos pelo menu dedicado.  
-
----
 
 ## ⚙️ Pré-requisitos e Instalação
 
-- Sistema Operacional: **Windows**  
-- Python **3.9** ou **3.11** (recomendado)  
-- VLC instalado  
+1. **Clonagem do repositório:** 
+        
+        git clone https://github.com/Marcio-Salmazo/Projeto-video-player.git
 
-Dependências Python:
-- `opencv-python`  
-- `PyQt5`  
-- `numpy`  
-- `python-vlc`  
+2. **Instação de dependências (win):**
 
-### Instalação Automática
-Na primeira execução o programa tenta instalar automaticamente as dependências.  
-Se houver falha, execute manualmente o script (via terminal ou por um duplo clique):
+    - Ter instalado o Python nas versões **3.9** ou **3.11** (recomendado). 
+    - Criar e ativar o ambiente virtual na pasta raíz do projeto (Abrir o terminal na pasta raíz do projeto):
+          
+          >> python -m venv .venv\
+          >> .venv\Scripts\activate
+    
+    - Instalar dependências:
+          
+          >> pip install -r '.\Main Project\Requirements.txt'
+          
+## ⚙️ Execução da aplicação
 
-\`\`\`bash
-Dependencias.bat
-\`\`\`
+1. Após a configuração do ambiente, a aplicação poderá ser iniciada a partir do módulo principal localizado no diretório *'Main Project/Main.py'*. No estágio atual de desenvolvimento, recomenda-se a execução da aplicação por meio de uma IDE compatível com Python, para maior controle acerca da execução.
 
----
+2. A implementação original da ferramenta, preservada no diretório .\Old Project Backup\, também pode ser executada para fins de consulta, comparação ou reprodução de versões anteriores do sistema. Entretanto, essa versão possui dependências específicas e requer configurações adicionais, incluindo a instalação da biblioteca VLC e a atualização dos caminhos das DLLs utilizados pelo código-fonte para integração com o reprodutor multimídia.
 
-## ▶️ Modo de Uso
+## ⚙️ Funcionalidades da aplicação 
 
-1. Abra o programa (diretório `\dist`)  
-2. Clique em **Abrir vídeo** e selecione um arquivo compatível  
-3. Utilize os controles ou atalhos para navegar até o frame desejado  
-4. Clique em **Capturar Frame** para abrir a janela de recorte  
-5. Salve as áreas de interesse em uma das categorias disponíveis  
-6. Gerencie os recortes salvos pelo **Menu de Salvamento**  
+1. **Controles de reprodução do vídeo:**
+    
+    * Play/Pause -- Inicia ou interrompe a reprodução do vídeo, possibilitando a inspeção visual do conteúdo em tempo real.
+    * Botão `Open Video` -- Permite selecionar e carregar arquivos de vídeo para processamento e extração de frames.
+    * Barra de rolagem -- Possibilita o deslocamento rápido para diferentes posições do vídeo, facilitando a localização de eventos específicos sem a necessidade de reprodução sequencial.
+    * Avanço e retrocesso frame-a-frame -- Permite navegar individualmente entre quadros consecutivos, oferecendo controle preciso para seleção de imagens em momentos específicos do vídeo.
+    * Botão `Save ROI` -- Realiza a captura e o armazenamento da região de interesse selecionada no frame atual, associando-a à classe definida pelo usuário.
 
----
+2. **Seleção da ROI:** A ferramenta permite a definição manual de uma Região de Interesse (Region of Interest — ROI) diretamente sobre o frame exibido (em tempo de reprodução). Após a seleção, apenas a área delimitada é considerada para o processo de extração e armazenamento da imagem. 
 
-## ⚠️ Erros Comuns
+3. **Definição da quantidade e dos rótulos de classe:** A aplicação oferece suporte à criação de categorias personalizadas para organização das imagens extraídas. A área lateral denominada `Classes` permite ao usuário incluir, remover, renomear ao analisar arquivos armazenados nos diretórios da base (De acordo com a categoria).
 
-| Erro | Causa provável | Solução |
-|------|----------------|---------|
-| ❌ Erro ao abrir vídeo | Extensão inválida | Verifique se o arquivo é `.mp4` ou `.mov` |
-| ❌ Aplicativo não abre | Python, VLC ou dependências ausentes | Reinstale dependências ou execute `Dependencias.bat` |
-| ❌ Recortes não aparecem no menu | Alteração manual do nome do vídeo | Utilize sempre o nome original |
-| ❌ Travamento ou fechamento inesperado | Instabilidade de código | Contatar desenvolvedor |
+4. **Armazenamento dos frames e estrutura da base de dados:** Os frames capturados são armazenados automaticamente de acordo com a classe selecionada pelo usuário, por meio do botão `Save ROI`. Além do armazenamento organizado das imagens, o sistema preserva a consistência da nomenclatura dos arquivos gerados, contribuindo para a rastreabilidade dos dados e para a reprodução dos experimentos realizados.
 
----
+## ⚠️ Alertas de falhas
+
+❌ **Erro ao abrir vídeo:** Provável causa pode estar relacionada À extensão do vídeo. Recomenda-se o uso das extensões `.mp4` ou `.mov` para maior garantia de compatibilidade.
+
 
 ## 🆕 Atualizações / Changelog
 
-- **v0.4.0-beta**
-  - Otimização da captura de frames e atualização do arquivo JSON por meio de batches, agora toda a operação de verificação é feita apenas com arquivos referentes ao vídeo atual em reprodução
-  - Modificações consideráveis nas funções FrameCapture e Model
-
-- **v0.3.0-beta**
-  - Otimização da captura de frames e atualização do arquivo JSON via hashcode
-  - Modificações consideráveis nas classes FrameCapture e Model
-  
-- **v0.2.1-beta**
-  - Inserção de `QMessageBox` para informar erros ao usuário  
-
-- **v0.2.0-beta**
-  - Adicionado botão para inverter imagem (180°)  
-  - Correções em bugs de navegação  
+- **Versão 0.0.1 - Criação do módulo MVP referente à reestruturação da aplicação:** Contém as ferramentas básicas para reprodução do vídeo e a implementação do recurso inicial de seleção da ROI e armazenamento de frames. 
 
 ---
 
