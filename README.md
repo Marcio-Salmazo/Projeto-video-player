@@ -60,18 +60,22 @@ O sistema integra recursos para reprodução de vídeos, navegação precisa ent
 ## ⚙️ Funcionalidades da aplicação 
 
 1. **Controles de reprodução do vídeo:**
-    
+
     * Play/Pause -- Inicia ou interrompe a reprodução do vídeo, possibilitando a inspeção visual do conteúdo em tempo real.
     * Botão `Open Video` -- Permite selecionar e carregar arquivos de vídeo para processamento e extração de frames.
     * Barra de rolagem -- Possibilita o deslocamento rápido para diferentes posições do vídeo, facilitando a localização de eventos específicos sem a necessidade de reprodução sequencial.
     * Avanço e retrocesso frame-a-frame -- Permite navegar individualmente entre quadros consecutivos, oferecendo controle preciso para seleção de imagens em momentos específicos do vídeo.
     * Botão `Save ROI` -- Realiza a captura e o armazenamento da região de interesse selecionada no frame atual, associando-a à classe definida pelo usuário.
 
+
 2. **Seleção da ROI:** A ferramenta permite a definição manual de uma Região de Interesse (Region of Interest — ROI) diretamente sobre o frame exibido (em tempo de reprodução). Após a seleção, apenas a área delimitada é considerada para o processo de extração e armazenamento da imagem. 
+
 
 3. **Definição da quantidade e dos rótulos de classe:** A aplicação oferece suporte à criação de categorias personalizadas para organização das imagens extraídas. A área lateral denominada `Classes` permite ao usuário incluir, remover, renomear ao analisar arquivos armazenados nos diretórios da base (De acordo com a categoria).
 
+
 4. **Armazenamento dos frames e estrutura da base de dados:** Os frames capturados são armazenados automaticamente de acordo com a classe selecionada pelo usuário, por meio do botão `Save ROI`. Além do armazenamento organizado das imagens, o sistema preserva a consistência da nomenclatura dos arquivos gerados, contribuindo para a rastreabilidade dos dados e para a reprodução dos experimentos realizados.
+
 
 ## ⚠️ Alertas de falhas
 

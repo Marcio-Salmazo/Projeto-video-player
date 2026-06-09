@@ -62,7 +62,7 @@ class VideoPlayer(QMainWindow):
 
         # Definindo um ícone para a janela
         model = Model()
-        self.setWindowIcon(QIcon(model.resource_path("figures/fig_mouse")))
+        self.setWindowIcon(QIcon(model.resource_path("../Figures/fig_mouse")))
 
         # Criando um widget central, ele será responsável por aagrupar o conteúdo da janela
         self.central_widget = QWidget(self)  # Cria uma instância do QWidget
@@ -112,12 +112,12 @@ class VideoPlayer(QMainWindow):
         os.environ["PATH"] += os.pathsep + BASE_DIR
 
         # Define manualmente o caminho dos plugins do VLC
-        vlc_plugin_path = os.path.join(BASE_DIR, "plugins")
+        vlc_plugin_path = os.path.join(BASE_DIR, "Plugins")
         os.environ["VLC_PLUGIN_PATH"] = vlc_plugin_path
 
         # Caminhos das DLLs
-        libvlc_path = os.path.join(BASE_DIR, "libvlc.dll")
-        libvlccore_path = os.path.join(BASE_DIR, "libvlccore.dll")
+        libvlc_path = os.path.join(BASE_DIR, "../libvlc.dll")
+        libvlccore_path = os.path.join(BASE_DIR, "../libvlccore.dll")
 
         # Carrega as DLLs do VLC manualmente
         ctypes.CDLL(libvlccore_path)

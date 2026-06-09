@@ -6,9 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="2fdac977-0eb1-43df-957d-1e46fc52e390" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Projeto-video-player.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Projeto-video-player.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main Project/Application/storage/Dataset_Manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/storage/Dataset_Manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main Project/Application/ui/Main_Window.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/ui/Main_Window.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Old Project Backup/Scripts/VideoPlayer.py" beforeDir="false" afterPath="$PROJECT_DIR$/Old Project Backup/Scripts/VideoPlayer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -38,16 +39,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.Main.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/marci_wawp/Desktop/Arquivos/Mestrado/Projeto-Classificadores&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.Main.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/marci_wawp/Desktop/Arquivos/Mestrado/Projeto-Classificadores",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="Main" type="PythonConfigurationType" factoryName="Python">
       <module name="Projeto-video-player" />
