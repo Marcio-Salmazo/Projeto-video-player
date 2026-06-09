@@ -69,6 +69,7 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         # Inicialização dos elementos
+        self.manage_dataset = None
         self.open_dataset_button = None
         self.add_class_button = None
         self.current_frame = None
@@ -140,9 +141,15 @@ class MainWindow(QMainWindow):
         video_layout = QVBoxLayout()
         # controls_layout -> Área secundária dividida horizontalmente para os controles do vídeo
         controls_layout = QHBoxLayout()
+        # functions_layout -> Área secundária dividida verticalmente para os controles gerais
+        functions_layout = QHBoxLayout()
 
         # Criação de uma Label para indicar as classes
         class_label = QLabel("Classes")
+        # Criação de uma Label para indicar os controles de vídeo
+        controls_label = QLabel("Controles de vídeo")
+        # Criação de uma Label para indicar os controles especiais
+        functions_label = QLabel("Funcionalidade especiais")
 
         # Criação de um Widget de lista responsável por exibir as classes descritas no construtor
         self.class_list = QListWidget()
@@ -162,6 +169,7 @@ class MainWindow(QMainWindow):
         self.timeline_layout.addWidget(self.frame_label)
 
         # Criação dos botões de controle
+        self.manage_dataset = QPushButton("Manage Dataset")
         self.open_button = QPushButton("Open Video")
         self.play_button = QPushButton("Play")
         self.pause_button = QPushButton("Pause")
@@ -176,13 +184,15 @@ class MainWindow(QMainWindow):
         self.class_list.setContextMenuPolicy(Qt.CustomContextMenu)
         self.class_list.customContextMenuRequested.connect(self.show_class_menu)
 
-        # Inserção dos botões criados no controls_layout
-        controls_layout.addWidget(self.open_button)
+        # Inserção dos botões no controls_layout
         controls_layout.addWidget(self.prev_button)
         controls_layout.addWidget(self.play_button)
         controls_layout.addWidget(self.pause_button)
         controls_layout.addWidget(self.next_button)
-        controls_layout.addWidget(self.save_button)
+
+        # Inserção dos botões no functions_layout
+        functions_layout.addWidget(self.open_button)
+        functions_layout.addWidget(self.save_button)
 
         # Inserção da Label e Lista de classes no left_layout
         left_layout.addWidget(class_label)
@@ -191,6 +201,7 @@ class MainWindow(QMainWindow):
         # Inserção dos botões criados no left_layout
         left_layout.addWidget(self.add_class_button)
         left_layout.addWidget(self.open_dataset_button)
+        left_layout.addWidget(self.manage_dataset)
 
         # Criação do Widget responsável pela reprodução do Vídeo
         self.video_widget = VideoWidget()
@@ -199,8 +210,14 @@ class MainWindow(QMainWindow):
         video_layout.addWidget(self.video_widget)
         # Inserção do widget de slider no video_layout
         video_layout.addLayout(self.timeline_layout)
-        # Inserção do controls_layout no video_layout
+
+        # Inserção do controls_layout e sua respectiva label no video_layout
+        video_layout.addWidget(controls_label)
         video_layout.addLayout(controls_layout)
+        # Inserção do functions_layout e sua respectiva label no video_layout
+        video_layout.addWidget(functions_label)
+        video_layout.addLayout(functions_layout)
+
         # OBS: video_layout contém tanto o widget de vídeo quanto todos
         # os componentes de controle definidos no controls_layout
 
@@ -232,6 +249,8 @@ class MainWindow(QMainWindow):
         self.timeline_slider.sliderPressed.connect(self.pause_video)
         # Função chamada ao 'soltar' o slider em dada posição
         self.timeline_slider.sliderReleased.connect(self.slider_released)
+
+        # self.manage_dataset.clicked.connect()
 
     # =================================================================
     #           CARREGAMENTO DE DATASET PRÉ-EXISTENTE
