@@ -25,7 +25,9 @@ O sistema integra recursos para reprodução de vídeos, navegação precisa ent
 
 - **Main Project/:** contém o código-fonte da versão atual da aplicação, desenvolvida a partir da reestruturação completa da implementação original. Esta versão adota uma arquitetura mais modular e escalável, priorizando a separação de responsabilidades, a manutenibilidade do código e a facilidade de extensão de funcionalidades futuras. O diretório concentra os componentes ativos do projeto, incluindo módulos de processamento, interface gráfica, gerenciamento de dados e demais recursos necessários à execução da ferramenta.
 
+
 - **Old Project Backup/:** reúne a implementação original da aplicação, juntamente com arquivos auxiliares, versões históricas, materiais de suporte e documentação associada ao desenvolvimento inicial. Esta versão foi concebida antes da adoção de uma arquitetura modular e utilizava a biblioteca VLC como componente principal para reprodução dos vídeos. O código foi preservado para fins de referência, rastreabilidade do processo de desenvolvimento e comparação entre diferentes abordagens arquiteturais empregadas ao longo do projeto.
+
 
 - **Documentation and Notes.docx:** documento que agrega anotações técnicas, registros de desenvolvimento, estudos preliminares e decisões de projeto tomadas durante a implementação da ferramenta. O material inclui observações sobre estratégias adotadas, desafios encontrados, alternativas avaliadas e aspectos metodológicos relevantes para a evolução da aplicação, servindo como complemento à documentação formal do repositório.
 
@@ -52,6 +54,7 @@ O sistema integra recursos para reprodução de vídeos, navegação precisa ent
 
 1. Após a configuração do ambiente, a aplicação poderá ser iniciada a partir do módulo principal localizado no diretório *'Main Project/Main.py'*. No estágio atual de desenvolvimento, recomenda-se a execução da aplicação por meio de uma IDE compatível com Python, para maior controle acerca da execução.
 
+
 2. A implementação original da ferramenta, preservada no diretório .\Old Project Backup\, também pode ser executada para fins de consulta, comparação ou reprodução de versões anteriores do sistema. Entretanto, essa versão possui dependências específicas e requer configurações adicionais, incluindo a instalação da biblioteca VLC e a atualização dos caminhos das DLLs utilizados pelo código-fonte para integração com o reprodutor multimídia.
 
 ## ⚙️ Funcionalidades da aplicação 
@@ -77,7 +80,10 @@ O sistema integra recursos para reprodução de vídeos, navegação precisa ent
 
 ## 🆕 Atualizações / Changelog
 
-- **Versão 0.0.1 - Criação do módulo MVP referente à reestruturação da aplicação:** Contém as ferramentas básicas para reprodução do vídeo e a implementação do recurso inicial de seleção da ROI e armazenamento de frames. 
+- **Versão 0.1.0 - Criação do módulo MVP referente à reestruturação da aplicação:** Contém as ferramentas básicas para reprodução do vídeo e a implementação do recurso inicial de seleção da ROI e armazenamento de frames. 
+
+
+- **Versão 0.2.0 - Carregamento de bases pré-existentes e ajuste de classes:** Permite ao usuário selecionar uma base de dados pré-existente ou iniciar estruturar um novo *dataset*. Adicionalmente foram implementadas ferramentas para gestão de classes (Adição, Exclusão e Renomeação). 
 
 ---
 

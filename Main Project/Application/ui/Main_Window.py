@@ -5,18 +5,23 @@
         * Lista de classes.
     Utilização do framework Qt para a estrturação da UI
 """
+import sys
 
 from PySide6.QtWidgets import (
     QMainWindow,
     QWidget,
     QPushButton,
     QFileDialog,
+    QDialog,
     QListWidget,
     QVBoxLayout,
     QHBoxLayout,
     QMessageBox,
     QLabel,
-    QSlider
+    QSlider,
+    QInputDialog,
+    QMenu,
+    QApplication
 )
 from PySide6.QtCore import Qt, QTimer
 
@@ -27,6 +32,36 @@ from ..storage.Dataset_Manager import DatasetManager
 from ..controllers.App_Controller import convert_cv_to_qt
 
 
+# QDialog modal logo no início da aplicação.
+# Ele aparece antes da janela principal e obriga o usuário a escolher uma opção antes de continuar.
+class StartupDialog(QDialog):
+    def __init__(self):
+        super().__init__()
+        self.choice = None
+        self.setWindowTitle("Inicialização")
+
+        # Criação de um Layout básico para alocar os botões
+        layout = QVBoxLayout()
+        # Definição dos botões
+        btn_open = QPushButton("Open pre-existing Database")
+        btn_new = QPushButton("Startup with new Database")
+        # Conexão dos botões às suas respectivas funções
+        btn_open.clicked.connect(self.open_existing)
+        btn_new.clicked.connect(self.create_new)
+        # Adição dos botões ao layout criado para esta Janela
+        layout.addWidget(btn_open)
+        layout.addWidget(btn_new)
+        self.setLayout(layout)
+
+    def open_existing(self):
+        self.choice = "open"
+        self.accept()
+
+    def create_new(self):
+        self.choice = "new"
+        self.accept()
+
+
 # QMainWindow é a classe base do framework Qt para criar a janela principal do aplicativo.
 # Neste caso, MainWindow herda diretamente os parâmetros de QMainWindow
 class MainWindow(QMainWindow):
@@ -34,6 +69,8 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         # Inicialização dos elementos
+        self.open_dataset_button = None
+        self.add_class_button = None
         self.current_frame = None
         self.save_button = None
         self.next_button = None
@@ -51,17 +88,40 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Dataset Annotation Tool")
         self.resize(1200, 800)
         self.video_manager = VideoManager()
-        self.dataset_manager = DatasetManager()
-        # self.controller = AppController(self)
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_playback_frame)
-        self.classes = [
-            "pain",
-            "no_pain",
-            "sleeping"
-        ]
-        self.dataset_manager.create_dataset_structure(self.classes)
+        self.classes = []
         self.setup_ui()
+
+        # Cria janela inicial para seleção de uma base pré-existente ou para criação de uma nova base
+        while True:
+
+            dialog = StartupDialog()
+            if not dialog.exec():
+                sys.exit()
+
+            if dialog.choice == "open":
+                # Abre uma nova janela para que o usuário possa selecionar o diretório da base de dados
+                self.dataset_manager = DatasetManager()
+                self.open_dataset()
+                break
+
+            elif dialog.choice == "new":
+                # Abre uma nova janela de diálogo, perguntando ao usuário o nome da nova base de dados
+                base_name, ok = QInputDialog.getText(
+                    self,
+                    "Novo Dataset",
+                    "Nome da base:"
+                )
+
+                # Caso o input seja inválido ou cancelado, retorna para a Janela principal
+                if not ok or not base_name:
+                    continue
+
+                # cria a base
+                self.dataset_manager = DatasetManager(base_name)
+                self.dataset_manager.create_dataset_structure(self.classes)
+                break
 
     # =================================================================
     #            DEFINIÇÃO E ORGANIZAÇÃO DOS ELEMENTOS DE U.I
@@ -89,10 +149,6 @@ class MainWindow(QMainWindow):
         self.class_list.addItems(self.classes)
         self.class_list.setCurrentRow(0)
 
-        # Inserção da Label e Lista de classes no left_layout
-        left_layout.addWidget(class_label)
-        left_layout.addWidget(self.class_list)
-
         # Criação do QSlider para implemetação da barra de rolagem do vídeo
         # Inicialização dos valores iniciais para a rolagem
         self.timeline_slider = QSlider(Qt.Horizontal)
@@ -112,6 +168,13 @@ class MainWindow(QMainWindow):
         self.prev_button = QPushButton("<<")
         self.next_button = QPushButton(">>")
         self.save_button = QPushButton("Save ROI")
+        self.add_class_button = QPushButton("Add Class")
+        self.open_dataset_button = QPushButton("Open Dataset")
+
+        # Criação de um menu de contexto para as classes da barra lateral esquerda
+        # O menu é acessado com o clique direito do mouse sobre a classe
+        self.class_list.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.class_list.customContextMenuRequested.connect(self.show_class_menu)
 
         # Inserção dos botões criados no controls_layout
         controls_layout.addWidget(self.open_button)
@@ -120,6 +183,14 @@ class MainWindow(QMainWindow):
         controls_layout.addWidget(self.pause_button)
         controls_layout.addWidget(self.next_button)
         controls_layout.addWidget(self.save_button)
+
+        # Inserção da Label e Lista de classes no left_layout
+        left_layout.addWidget(class_label)
+        left_layout.addWidget(self.class_list)
+
+        # Inserção dos botões criados no left_layout
+        left_layout.addWidget(self.add_class_button)
+        left_layout.addWidget(self.open_dataset_button)
 
         # Criação do Widget responsável pela reprodução do Vídeo
         self.video_widget = VideoWidget()
@@ -155,10 +226,117 @@ class MainWindow(QMainWindow):
         self.prev_button.clicked.connect(self.previous_frame)
         self.next_button.clicked.connect(self.next_frame)
         self.save_button.clicked.connect(self.save_roi)
+        self.add_class_button.clicked.connect(self.add_class)
+        self.open_dataset_button.clicked.connect(self.open_dataset)
         # Pausa o video ao 'pressionar' o slider
         self.timeline_slider.sliderPressed.connect(self.pause_video)
         # Função chamada ao 'soltar' o slider em dada posição
         self.timeline_slider.sliderReleased.connect(self.slider_released)
+
+    # =================================================================
+    #           CARREGAMENTO DE DATASET PRÉ-EXISTENTE
+    # =================================================================
+    def open_dataset(self):
+
+        # Abre uma nova Janela destinada à seleção do diretório da base de dados
+        dataset_path = QFileDialog.getExistingDirectory(self, "Selecionar Dataset")
+        if not dataset_path:
+            return
+
+        # Obtém a lista de classes existentes no diretório indicado
+        classes = (self.dataset_manager.load_dataset(dataset_path))
+        # Limpa a 'class_list' na área lateral à esquerda
+        if self.class_list is not None:
+            self.class_list.clear()
+        # Adiciona as classes obtidas no carregamento da base na área lateral
+        self.class_list.addItems(classes)
+        # Redefine as classes
+        self.classes = classes
+
+    # =================================================================
+    #           GERENCIAMENTO DAS CLASSES (ÁREA À ESQUERDA)
+    # =================================================================
+
+    def add_class(self):  # >>>>>>>>>>>>> ADICIONAR NOVA CLASSE AO DATASET
+
+        # Abre uma nova janela de diálogo, perguntando ao usuário o nome que a nova classe deve ter
+        # Em sequência é validado se uma string válida foi digitada
+        class_name, ok = QInputDialog.getText(self, "Nova Classe", "Nome da classe:")
+        if not ok:
+            return
+        # Remove potenciais espaços em branco do texto digitado
+        # Valida se a String restante permanece válida
+        class_name = class_name.strip()
+        if not class_name:
+            return
+
+        # Chama a função responsável por criar a nova classe no dataset
+        self.dataset_manager.create_class(class_name)
+        # Incrementa o nome da classe na lista QWidgetList
+        self.class_list.addItem(class_name)
+
+    def show_class_menu(self, position):  # >>>>>>>>>>>>> DEFINIÇÃO DO MENU DE CONTEXO PARA CADA CLASSE
+
+        # Exibe o menu para a classe indicada pela posição
+        # A posição é extraída automaticamente de class_list,
+        # de acordo com o item selecionado ao pressionar o clique direito do mouse
+        item = self.class_list.itemAt(position)
+        if item is None:
+            return
+
+        # Instância de um QMenu e seus itens
+        menu = QMenu()
+        rename_action = menu.addAction("Rename")
+        delete_action = menu.addAction("Delete")
+
+        # Recebe qual dos itens no menu foram selecionados
+        # Chamando suas respectivas funções em sequência
+        action = menu.exec(self.class_list.mapToGlobal(position))
+        if action == rename_action:
+            self.rename_class(item)
+        elif action == delete_action:
+            self.delete_class(item)
+
+    def rename_class(self, item):  # >>>>>>>>>>>>> RENOMEAR CLASSE (DENTRO DO MENU DE CONTEXTO)
+
+        # Obtém o nome original do item, para permitir a edição do nome original
+        # Caso contrário, ao chamar a função, o nome original seria apagado diretamente
+        old_name = item.text()
+        # Abre uma nova janela de diálogo, perguntando ao usuário o novo nome que da classe selecionada
+        new_name, ok = (QInputDialog.getText(self, "Renomear Classe", "Novo nome:", text=old_name))
+        if not ok:
+            return
+
+        # Remove potenciais espaços em branco do texto digitado
+        # Valida se a String restante permanece válida
+        new_name = new_name.strip()
+        if not new_name:
+            return
+
+        # Chama a função responsável por alterar o nome no diretório do dataset
+        self.dataset_manager.rename_class(
+            old_name,
+            new_name
+        )
+        # Altera o valor do nome para o respectivo item da lista
+        item.setText(new_name)
+
+    def delete_class(self, item):  # >>>>>>>>>>>>> DELETAR CLASSE (DENTRO DO MENU DE CONTEXTO)
+
+        # Obtém o nome original do item
+        class_name = item.text()
+        # Abre uma nova Janela solicitando a confirmação de exclusão
+        response = QMessageBox.question(self, "Excluir Classe",
+                                        f"Excluir '{class_name}' e todos os seus itens internos ?",
+                                        QMessageBox.Yes | QMessageBox.No)
+        # Valida a resposta da Janela 'response'
+        if response != QMessageBox.Yes:
+            return
+        # Chama a função responsável por deletar a classe no diretório do dataset
+        self.dataset_manager.delete_class(class_name)
+        # Remove o item da lista de classes
+        row = self.class_list.row(item)
+        self.class_list.takeItem(row)
 
     # =================================================================
     #                    CONTROLADORES DO SLIDER
