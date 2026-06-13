@@ -24,6 +24,7 @@ class VideoWidget(QLabel):
         super().__init__()
 
         # Configurações base do Widget
+        self.visualROI = None  # Coordenadas da ROI na área de exibição do widget
         self.setAlignment(Qt.AlignCenter)
         self.setMinimumSize(800, 600)
 
@@ -40,8 +41,13 @@ class VideoWidget(QLabel):
         # Dataclass para informações de Display
         self.display_info = DisplayInfo()
 
+        # Estados de 'arraste' para a ROI travada
+        self.dragging_roi = False
+        self.drag_start_x = 0
+        self.drag_start_y = 0
+
     # =================================================================
-    #       EVENTOS RELACIONADOS AO MONITORAMENTO DO MOUSE
+    #         EVENTOS RELACIONADOS AO MONITORAMENTO DO MOUSE
     # =================================================================
     def mousePressEvent(self, event):
 
@@ -50,6 +56,8 @@ class VideoWidget(QLabel):
                 event.position().y()
         ):
             return
+
+        # if self.lock_roi_checkbox.isChecked() and self.roi is not None:
 
         # Armazenamento das coordenadas iniciais no momento do clique
         self.start_x = event.position().x()
@@ -63,7 +71,6 @@ class VideoWidget(QLabel):
 
     def mouseMoveEvent(self, event):
         if self.drawing:
-
             # Atualiza consistentemente as coordenadas finais
             self.end_x = event.position().x()
             self.end_y = event.position().y()
@@ -82,7 +89,7 @@ class VideoWidget(QLabel):
         # O ROI armazenado corresponde à coordenadas reais do vídeo
         fx1, fy1 = self.widget_to_frame_coords(self.start_x, self.start_y)
         fx2, fy2 = self.widget_to_frame_coords(self.end_x, self.end_y)
-        self.roi = ROI_Model(fx1,fy1,fx2,fy2)
+        self.roi = ROI_Model(fx1, fy1, fx2, fy2)
 
         self.update()
 
@@ -93,7 +100,6 @@ class VideoWidget(QLabel):
         super().paintEvent(event)
 
         if self.roi or self.drawing:
-
             # Criação e configuração do elemento de pintura
             painter = QPainter(self)
             painter.setPen(QPen(Qt.red, 2, Qt.SolidLine))
@@ -105,6 +111,9 @@ class VideoWidget(QLabel):
                 int(self.end_x - self.start_x),
                 int(self.end_y - self.start_y)
             )
+            # Coordenadas da ROI na área de exibição do widget
+            # Serve para a função de travar a ROI
+            self.visualROI = rect
 
             painter.drawRect(rect)
 
@@ -129,7 +138,7 @@ class VideoWidget(QLabel):
         return frame_x, frame_y
 
     # =================================================================
-    #         GARANTE QUE A SELEÇÃO ESTÁ DENTRO DA IMAGEM
+    #         GARANTIA DE QUE A SELEÇÃO ESTÁ DENTRO DA IMAGEM
     # =================================================================
     def point_inside_image(self, x, y):
 
@@ -138,3 +147,17 @@ class VideoWidget(QLabel):
                 and
                 self.display_info.offset_y <= y <= self.display_info.offset_y + self.display_info.display_height
         )
+
+    # =================================================================
+    #               DETECÇÃO DO CLIQUE DENTRO DA ROI
+    # =================================================================
+    def point_inside_roi(self, x, y):
+
+        # Avalia se existe um roi criada
+        if self.roi is None:
+            return False
+
+        # Obtém os pontos da seleção (ROI)
+        x1, y1, x2, y2 = self.roi.normalized()
+        # Retorna as coordenadas, caso esteja dentro da área de seleção
+        return x1 <= x <= x2 and y1 <= y <= y2

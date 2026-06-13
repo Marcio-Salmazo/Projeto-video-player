@@ -21,9 +21,9 @@ from PySide6.QtWidgets import (
     QSlider,
     QInputDialog,
     QMenu,
-    QApplication
+    QCheckBox
 )
-from PySide6.QtCore import Qt, QTimer
+from PySide6.QtCore import Qt, QTimer, QSize
 
 # Importação dos demais módulos (scripts) do projeto
 from ..ui.Video_Widget import VideoWidget
@@ -38,19 +38,31 @@ class StartupDialog(QDialog):
     def __init__(self):
         super().__init__()
         self.choice = None
+        self.setFixedWidth(400)
+        self.setFixedHeight(250)
         self.setWindowTitle("Inicialização")
 
         # Criação de um Layout básico para alocar os botões
         layout = QVBoxLayout()
         # Definição dos botões
         btn_open = QPushButton("Open pre-existing Database")
+        btn_open.setMinimumWidth(150)
+        btn_open.setMinimumHeight(50)
         btn_new = QPushButton("Startup with new Database")
+        btn_new.setMinimumWidth(150)
+        btn_new.setMinimumHeight(50)
+        btn_exit = QPushButton("Exit")
+        btn_exit.setMinimumWidth(150)
+        btn_exit.setMinimumHeight(50)
         # Conexão dos botões às suas respectivas funções
         btn_open.clicked.connect(self.open_existing)
         btn_new.clicked.connect(self.create_new)
+        btn_exit.clicked.connect(sys.exit)
         # Adição dos botões ao layout criado para esta Janela
         layout.addWidget(btn_open)
         layout.addWidget(btn_new)
+        layout.addSpacing(50)
+        layout.addWidget(btn_exit)
         self.setLayout(layout)
 
     def open_existing(self):
@@ -69,6 +81,7 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         # Inicialização dos elementos
+        self.lock_roi_checkbox = None
         self.manage_dataset = None
         self.open_dataset_button = None
         self.add_class_button = None
@@ -176,6 +189,7 @@ class MainWindow(QMainWindow):
         self.prev_button = QPushButton("<<")
         self.next_button = QPushButton(">>")
         self.save_button = QPushButton("Save ROI")
+        self.lock_roi_checkbox = QCheckBox("Lock ROI")
         self.add_class_button = QPushButton("Add Class")
         self.open_dataset_button = QPushButton("Open Dataset")
 
@@ -193,6 +207,7 @@ class MainWindow(QMainWindow):
         # Inserção dos botões no functions_layout
         functions_layout.addWidget(self.open_button)
         functions_layout.addWidget(self.save_button)
+        functions_layout.addWidget(self.lock_roi_checkbox)
 
         # Inserção da Label e Lista de classes no left_layout
         left_layout.addWidget(class_label)
@@ -205,6 +220,9 @@ class MainWindow(QMainWindow):
 
         # Criação do Widget responsável pela reprodução do Vídeo
         self.video_widget = VideoWidget()
+        # Entrega de uma referência do CheckBox para o VideoWidget.
+        # ALTERAR REFERENCIA NO FUTURO
+        self.video_widget.lock_roi_checkbox = self.lock_roi_checkbox
 
         # Inserção do widget de vídeo no video_layout
         video_layout.addWidget(self.video_widget)
