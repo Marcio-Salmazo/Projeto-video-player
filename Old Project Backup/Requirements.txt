@@ -1,4 +1,0 @@
-opencv-python 
-PyQt5 
-numpy 
-python-vlc
