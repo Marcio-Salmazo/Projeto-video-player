@@ -12,10 +12,11 @@ from PySide6.QtWidgets import (
     QLabel,
     QSlider,
     QInputDialog,
-    QMenu
+    QMenu,
+    QCheckBox
 )
 from PySide6.QtCore import Qt, QTimer
-from ..services.videowidget_services import VideoWidget
+# from ..services.roi_services import VideoWidget
 from ..services.conversion_services import ConversionServices
 
 
@@ -26,6 +27,7 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         # Inicialização dos elementos da janela
+        self.lock_roi_checkbox = None
         self.manage_dataset_button = None
         self.open_dataset_button = None
         self.add_class_button = None
@@ -109,7 +111,7 @@ class MainWindow(QMainWindow):
         self.prev_button = QPushButton("<<")
         self.next_button = QPushButton(">>")
         self.save_button = QPushButton("Save ROI")
-        # self.lock_roi_checkbox = QCheckBox("Lock ROI")
+        self.lock_roi_checkbox = QCheckBox("Lock ROI")
         self.add_class_button = QPushButton("Add Class")
         self.open_dataset_button = QPushButton("Open Dataset")
 
@@ -127,7 +129,7 @@ class MainWindow(QMainWindow):
         # Inserção dos botões no functions_layout
         functions_layout.addWidget(self.open_button)
         functions_layout.addWidget(self.save_button)
-        # functions_layout.addWidget(self.lock_roi_checkbox)
+        functions_layout.addWidget(self.lock_roi_checkbox)
 
         # Inserção da Label e Lista de classes no left_layout
         left_layout.addWidget(class_label)
@@ -140,10 +142,9 @@ class MainWindow(QMainWindow):
         left_layout.addWidget(self.manage_dataset_button)
 
         # ....................................................................
-        # Criação do Widget responsável pela reprodução do Vídeo
-        # Passa para o widget, uma referência do controler, vindo de Main
 
-        self.video_widget = VideoWidget()
+        # Criação do Widget responsável pela reprodução do Vídeo
+        self.video_widget = self.controller.create_video_widget()
         # Inserção do widget de vídeo no video_layout
         video_layout.addWidget(self.video_widget)
         # Inserção do widget de slider no video_layout
@@ -191,6 +192,8 @@ class MainWindow(QMainWindow):
 
         # Conexão de sinal emitido ao iniciar a seleção da ROI
         self.video_widget.pause_requested.connect(self.pause_video)
+        # Conexão do checkbox para travar a ROI
+        self.lock_roi_checkbox.toggled.connect(self.controller.set_lock_roi)
 
     # ------------------------------------------------------------------------------------------------------------------
     #                   Conjunto de funções referentes ao controle e execução do Vídeo
@@ -443,7 +446,7 @@ class MainWindow(QMainWindow):
     def save_roi(self):
 
         # Valida se há uma ROI definida
-        if self.video_widget.roi is None:
+        if self.video_widget.real_roi is None:
             QMessageBox.warning(self, "Erro", "Nenhuma ROI selecionada")
             return
 
@@ -459,7 +462,7 @@ class MainWindow(QMainWindow):
         # na classe selecionada pelo usuário
         self.controller.save_roi(
             self.controller.current_frame_image,
-            self.video_widget.roi,
+            self.video_widget.real_roi,
             selected_item.text()
         )
 

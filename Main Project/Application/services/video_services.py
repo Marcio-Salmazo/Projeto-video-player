@@ -2,7 +2,7 @@ from ..fsm.video_fsm import VideoFSM
 import cv2
 
 
-class VideoController:
+class VideoServices:
 
     def __init__(self, app_fsm):
 

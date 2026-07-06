@@ -6,7 +6,7 @@ import shutil
 from ..fsm.app_fsm import ApplicationFSM
 
 
-class DatasetController:
+class DatasetServices:
 
     def __init__(self, app_fsm: ApplicationFSM):
         self.app_fsm = app_fsm
@@ -111,7 +111,7 @@ class DatasetController:
         print(f"Imagem salva: {full_path}")  # Mensagem de LOG
 
     # ------------------------------------------------------------------------------------------------------------------
-    #                                               Funções de checagem do estado
+    #                                          Funções de checagem do estado
     # ------------------------------------------------------------------------------------------------------------------
 
     def is_ready(self):

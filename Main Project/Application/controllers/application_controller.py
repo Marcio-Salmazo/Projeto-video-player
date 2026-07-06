@@ -1,5 +1,6 @@
-from .video_controller import VideoController
-from .dataset_controller import DatasetController
+from ..services.video_services import VideoServices
+from ..services.dataset_services import DatasetServices
+from ..services.videowidget_services import VideoWidget
 from ..fsm.app_fsm import ApplicationFSM
 
 
@@ -9,8 +10,22 @@ class ApplicationController:
 
     def __init__(self):
         self.app_fsm = ApplicationFSM()
-        self.video = VideoController(self.app_fsm)
-        self.dataset = DatasetController(self.app_fsm)
+        self.video = VideoServices(self.app_fsm)
+        self.dataset = DatasetServices(self.app_fsm)
+        self.video_widget = None
+
+    # ------------------------------------------------------------------------------------------------------------------
+    #                               Controle de ações específicas para o VideoWidget
+    # ------------------------------------------------------------------------------------------------------------------
+
+    def create_video_widget(self):
+        self.video_widget = VideoWidget()
+        return self.video_widget
+
+    def set_lock_roi(self, state: bool):
+        # Define o estado da flag
+        if self.video_widget:
+            self.video_widget.lock_roi = state
 
     # ------------------------------------------------------------------------------------------------------------------
     #                               Controle de ações relacionadas à base de dados
@@ -34,11 +49,18 @@ class ApplicationController:
     def save_roi(self, frame, roi, class_name):
         self.dataset.save_roi(frame, roi, class_name)
 
-    # ..................................................................................................................
-    # Comparações
+    # .........................................
+    # Comparações de estados
 
     def is_ready(self):
         return self.dataset.is_ready()
+
+    # .........................................
+    # Properties
+
+    @property
+    def dataset_path(self):
+        return self.dataset.base_path
 
     # ------------------------------------------------------------------------------------------------------------------
     #                   Controle de ações relacionadas à reprodução e funcionalidades do vídeo
@@ -71,8 +93,9 @@ class ApplicationController:
     def format_time(self, seconds):
         return self.video.format_time(seconds)
 
-    # ..................................................................................................................
-    # Comparações
+    # .........................................
+    # Comparações de estados
+
     def is_playing(self):
         return self.video.is_playing()
 
@@ -85,9 +108,9 @@ class ApplicationController:
     def is_seeking(self):
         return self.video.is_seeking()
 
-    # ..................................................................................................................
-    # OBSERVAÇÃO: @property trata métodos como atributos e são utilizado quando o objetivo é para obter informações
-    
+    # .........................................
+    # Properties
+
     @property
     def fps(self):
         return self.video.fps
@@ -107,7 +130,3 @@ class ApplicationController:
     @property
     def current_frame_image(self):
         return self.video.current_frame_image
-
-    @property
-    def dataset_path(self):
-        return self.dataset.base_path
