@@ -5,9 +5,10 @@ from PySide6.QtWidgets import (
     QInputDialog
 )
 
-from Application.controllers.application_controller import ApplicationController
-from Application.ui.main_window import MainWindow
-from Application.ui.startup_dialog import StartupDialog, StartupChoice
+from Application.controllers.data_controller import DataController
+from Application.controllers.video_controller import VideoController
+from Application.view.main_window import MainWindow
+from Application.view.startup_dialog import StartupDialog, StartupChoice
 
 
 def main():
@@ -17,7 +18,8 @@ def main():
     app = QApplication(sys.argv)
 
     # Cria a instância principal do controlador
-    controller = ApplicationController()
+    video_controller = VideoController()
+    data_controller = DataController()
 
     # Loop que apresenta a tela inicial até que seja feita
     # um escolha entre um dataset novo ou pré-existente para iniciar
@@ -36,7 +38,7 @@ def main():
             if not dataset_path:
                 continue
 
-            classes = controller.dataset.open_dataset(dataset_path)
+            classes = data_controller.dataset.open_dataset(dataset_path)
             break
 
         # Operação para iniciar um novo dataset
@@ -53,12 +55,13 @@ def main():
                 continue
 
             # Cria o diretório de trabalho e inicializa sem classes
-            controller.dataset.create_dataset(base_name)
+            data_controller.dataset.create_dataset(base_name)
             classes = []
             break
 
-    # Apresenta a tela inicial
-    window = MainWindow(controller, classes)
+    # Apresenta a tela inicial (VIEW)
+    # Passando para a UI a referencia do controller e as classes iniciais
+    window = MainWindow(video_controller, data_controller, classes)
     window.show()
     sys.exit(app.exec())
 

@@ -5,13 +5,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2fdac977-0eb1-43df-957d-1e46fc52e390" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Main Project/Application/models/fsm/app_state.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main Project/Application/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main Project/Application/controllers/application_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/controllers/application_controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main Project/Application/controllers/dataset_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/services/dataset_services.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main Project/Application/controllers/video_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/services/video_services.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main Project/Application/services/videowidget_services.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/services/videowidget_services.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main Project/Application/ui/main_window.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/ui/main_window.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/models/fsm/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/controllers/application_controller.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/fsm/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/models/services/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/fsm/app_fsm.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/models/fsm/app_fsm.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/fsm/app_state.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/fsm/video_fsm.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/models/fsm/video_fsm.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/fsm/video_state.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/models/fsm/video_state.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/models/display_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/models/dataClasses/display_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/models/roi_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/models/dataClasses/roi_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/services/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/view/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/services/conversion_services.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/models/services/conversion_services.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/services/dataset_services.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/models/services/dataset_services.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/services/video_services.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/models/services/video_services.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/services/videowidget_services.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/view/video_widget.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/ui/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/ui/main_window.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/view/main_window.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/ui/startup_dialog.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/view/startup_dialog.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Extras/MainProject_NoFSM.rar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Extras/OldProject_Backup.rar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main Project/__init__.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -54,11 +69,14 @@
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/marci_wawp/Desktop/Arquivos/Mestrado/Projeto-video-player/Main Project/Application/services&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;
   }
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\marci_wawp\Desktop\Arquivos\Mestrado\Projeto-video-player\Main Project\Application\view" />
+      <recent name="C:\Users\marci_wawp\Desktop\Arquivos\Mestrado\Projeto-video-player\Main Project\Application\models\dataClasses" />
+      <recent name="C:\Users\marci_wawp\Desktop\Arquivos\Mestrado\Projeto-video-player\Main Project\Application\models" />
       <recent name="C:\Users\marci_wawp\Desktop\Arquivos\Mestrado\Projeto-video-player\Main Project\Application\services" />
     </key>
   </component>
