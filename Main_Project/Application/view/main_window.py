@@ -25,6 +25,8 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Qt, QTimer
 from Main_Project.Application.services.conversion_services import ConversionServices
+# Posso importar isso aqui?
+from Main_Project.Application.models.fsm.user_role import UserRole
 
 
 # QMainWindow é a classe base do framework Qt para criar a janela principal do aplicativo.
@@ -51,10 +53,11 @@ class MainWindow(QMainWindow):
         self.frame_label = None
         self.timeline_layout = None
 
-        # Recebe a referência da instância do controller da aplicação (ApplicationController)
-        # e as classes à serem exibidas na aba lateral (Caso uma base pré-existente tenha sido selecionada)
+        # Definição dos controllers passados por parâmetros
         self.video_controller = video_controller
         self.data_controller = data_controller
+        self.user_controller = user_controller
+        # Definição das classes passadas por parâmetros
         self.classes = classes
 
         # Parâmetros PADRÕES para criação da janela principal
@@ -63,6 +66,7 @@ class MainWindow(QMainWindow):
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_playback_frame)
         self.setup_ui()
+        self.configure_permissions()
 
     # ------------------------------------------------------------------------------------------------------------------
     #               Função responsável por definir e organizar os elementos da interface gráfica
@@ -123,6 +127,11 @@ class MainWindow(QMainWindow):
         self.add_class_button = QPushButton("Add Class")
         self.open_dataset_button = QPushButton("Open Dataset")
 
+        # Construção da Label responsável por exibir o usuário logado
+        user_label = QLabel()
+        user_label.setAlignment(Qt.AlignLeft)
+        user_label.setText(f"{self.user_controller.current_user.username} ({self.user_controller.role.value})")
+
         # Criação de um menu de contexto para as classes da barra lateral esquerda
         # O menu é acessado com o clique direito do mouse sobre a classe
         self.class_list.setContextMenuPolicy(Qt.CustomContextMenu)
@@ -140,6 +149,7 @@ class MainWindow(QMainWindow):
         functions_layout.addWidget(self.lock_roi_checkbox)
 
         # Inserção da Label e Lista de classes no left_layout
+        left_layout.addWidget(user_label)
         left_layout.addWidget(class_label)
         left_layout.addWidget(self.class_list)
         left_layout.addWidget(self.dataset_label)
@@ -475,3 +485,39 @@ class MainWindow(QMainWindow):
 
         # Informa o sucesso do armazenamento ao usuário
         QMessageBox.information(self, "Sucesso", "ROI salva com sucesso")
+
+    # ------------------------------------------------------------------------------------------------------------------
+    #                   Conjunto de funções referentes às retrições de controle por usuário
+    # ------------------------------------------------------------------------------------------------------------------
+
+    def configure_permissions(self):
+
+        # Obtém o papel do usuário atual que está utilizando a ferramenta
+        role = self.user_controller.role
+        if role == UserRole.ADMIN:
+            self.configure_admin()
+        else:
+            self.configure_annotator()
+
+    def configure_admin(self):
+
+        self.open_button.setEnabled(True)
+        self.save_button.setEnabled(True)
+        self.add_class_button.setEnabled(True)
+        self.manage_dataset_button.setEnabled(True)
+
+    def configure_annotator(self):
+
+        self.open_button.setEnabled(False)
+        self.save_button.setEnabled(False)
+        self.add_class_button.setEnabled(False)
+        self.manage_dataset_button.setEnabled(False)
+
+
+
+
+
+
+
+
+

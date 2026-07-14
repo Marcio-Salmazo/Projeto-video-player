@@ -6,12 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="2fdac977-0eb1-43df-957d-1e46fc52e390" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main_Project/Application/controllers/user_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Application/controllers/user_controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main_Project/Application/models/dataClasses/user_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Application/models/dataClasses/user_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main_Project/Application/models/fsm/user_role.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Application/models/fsm/user_role.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main_Project/Application/services/user_manager.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main_Project/Application/services/user_services.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Application/services/user_services.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main_Project/Application/view/login_dialog.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Application/view/login_dialog.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main_Project/Application/view/main_window.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Application/view/main_window.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
