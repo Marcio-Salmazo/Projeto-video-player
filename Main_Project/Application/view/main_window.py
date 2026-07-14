@@ -122,7 +122,7 @@ class MainWindow(QMainWindow):
         self.pause_button = QPushButton("Pause")
         self.prev_button = QPushButton("<<")
         self.next_button = QPushButton(">>")
-        self.save_button = QPushButton("Save ROI")
+        self.save_button = QPushButton("Classify ROI")
         self.lock_roi_checkbox = QCheckBox("Lock ROI")
         self.add_class_button = QPushButton("Add Class")
         self.open_dataset_button = QPushButton("Open Dataset")
@@ -229,9 +229,11 @@ class MainWindow(QMainWindow):
         # Chama a função para carregamento do arquivo no caminho indicado
         if path:
             self.video_controller.load_video(path)
+
             # Obtém apenas o nome do arquivo base para exibição
-            file_basename = os.path.basename(self.data_controller.dataset_path)
-            self.dataset_label.setText(file_basename)
+            # file_basename = os.path.basename(self.data_controller.dataset_path)
+            # self.dataset_label.setText(file_basename)
+
             # Ao abrir o vídeo, o slider atualiza seu valor máximo com base no total de frames
             self.timeline_slider.setMaximum(self.video_controller.total_frames - 1)
 
@@ -380,7 +382,10 @@ class MainWindow(QMainWindow):
         self.class_list.clear()
         self.class_list.addItems(classes)
         self.classes = classes
-        self.dataset_label.setText(path)
+
+        # Obtém apenas o nome do arquivo base para exibição
+        dataset_basename = os.path.basename(path)
+        self.dataset_label.setText(f"Dataset: {dataset_basename}")
 
     # ..................................................................................................................
 
@@ -501,23 +506,22 @@ class MainWindow(QMainWindow):
 
     def configure_admin(self):
 
+        # Habilita as funções do usuário administrador
+        self.play_button.setEnabled(True)
+        self.pause_button.setEnabled(True)
         self.open_button.setEnabled(True)
-        self.save_button.setEnabled(True)
+        self.lock_roi_checkbox.setEnabled(True)
         self.add_class_button.setEnabled(True)
-        self.manage_dataset_button.setEnabled(True)
+        self.manage_dataset_button.setEnabled(False)
+        self.class_list.setContextMenuPolicy(Qt.CustomContextMenu)
 
     def configure_annotator(self):
 
+        # Desabilita funções do usuário responsável pelas anotações
+        self.play_button.setEnabled(False)
+        self.pause_button.setEnabled(False)
         self.open_button.setEnabled(False)
-        self.save_button.setEnabled(False)
+        self.lock_roi_checkbox.setEnabled(False)
         self.add_class_button.setEnabled(False)
         self.manage_dataset_button.setEnabled(False)
-
-
-
-
-
-
-
-
-
+        self.class_list.setContextMenuPolicy(Qt.ContextMenuPolicy.NoContextMenu)
