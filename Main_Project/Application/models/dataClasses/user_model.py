@@ -6,12 +6,19 @@
 """
 
 from dataclasses import dataclass
-from ...models.fsm.user_role import UserRole
+from Main_Project.Application.models.fsm.user_role import UserRole
 
 
 @dataclass
 class UserModel:
 
+    # Criação do modelo base de um usuário
+    # composto por nome, senha e papel no aplicativo.
+    #   OBS: Esse padrão deve ser seguido no arquivo json
+
     username: str
     password: str
+
+    # O papel do usuário é definido por UserRole
+    # estando restrito aos tipos definifos no Script
     role: UserRole

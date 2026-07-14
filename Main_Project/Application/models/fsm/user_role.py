@@ -1,4 +1,6 @@
 """
+    Script responsável por definir os papeis de cada usuário
+
     Usuário Administrador:
         * Criar Dataset
         * Adicionar, Renomear e Excluir Classes
@@ -11,7 +13,7 @@
         * Classificar imagens
         * Salvar suas classificações
 """
-from enum import Enum, auto
+from enum import Enum
 
 
 class UserRole(Enum):
