@@ -5,29 +5,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2fdac977-0eb1-43df-957d-1e46fc52e390" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Main Project/Application/models/fsm/app_state.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main Project/Application/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/models/fsm/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main Project/Application/controllers/application_controller.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main Project/Application/fsm/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/models/services/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main Project/Application/fsm/app_fsm.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/models/fsm/app_fsm.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main Project/Application/fsm/app_state.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main Project/Application/fsm/video_fsm.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/models/fsm/video_fsm.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main Project/Application/fsm/video_state.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/models/fsm/video_state.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main Project/Application/models/display_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/models/dataClasses/display_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main Project/Application/models/roi_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/models/dataClasses/roi_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main Project/Application/services/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/view/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main Project/Application/services/conversion_services.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/models/services/conversion_services.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main Project/Application/services/dataset_services.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/models/services/dataset_services.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main Project/Application/services/video_services.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/models/services/video_services.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main Project/Application/services/videowidget_services.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/view/video_widget.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main Project/Application/ui/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main Project/Application/ui/main_window.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/view/main_window.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main Project/Application/ui/startup_dialog.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Application/view/startup_dialog.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main Project/Extras/MainProject_NoFSM.rar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main Project/Extras/OldProject_Backup.rar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main Project/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main Project/Main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main Project/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Application/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/controllers/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Application/controllers/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/controllers/data_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Application/controllers/data_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/controllers/user_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Application/controllers/user_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/controllers/video_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Application/controllers/video_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Application/models/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/models/dataClasses/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Application/models/dataClasses/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/models/dataClasses/display_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Application/models/dataClasses/display_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/models/dataClasses/roi_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Application/models/dataClasses/roi_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/models/fsm/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Application/models/fsm/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/models/fsm/app_fsm.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Application/models/fsm/app_fsm.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/models/fsm/app_state.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Application/models/fsm/app_state.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/models/fsm/user_role.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Application/models/fsm/user_role.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/models/fsm/video_fsm.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Application/models/fsm/video_fsm.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/models/fsm/video_state.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Application/models/fsm/video_state.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/models/services/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Application/services/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/models/services/conversion_services.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Application/services/conversion_services.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/models/services/dataset_services.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Application/services/dataset_services.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/models/services/user_services.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Application/services/user_services.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/models/services/video_services.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Application/services/video_services.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/view/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Application/view/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/view/main_window.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Application/view/main_window.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/view/startup_dialog.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Application/view/startup_dialog.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Application/view/video_widget.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Application/view/video_widget.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main Project/Requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Main_Project/Requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,21 +63,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.application_controller.executor&quot;: &quot;Run&quot;,
-    &quot;Python.video_controller.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/marci_wawp/Desktop/Arquivos/Mestrado/Projeto-video-player/Main Project/Application/services&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.Main.executor": "Run",
+    "Python.application_controller.executor": "Run",
+    "Python.video_controller.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/marci_wawp/Desktop/Arquivos/Mestrado/Projeto-video-player/Main_Project/Main.py",
+    "settings.editor.selected.configurable": "editor.preferences.fonts.default"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\marci_wawp\Desktop\Arquivos\Mestrado\Projeto-video-player\Main Project\Application" />
       <recent name="C:\Users\marci_wawp\Desktop\Arquivos\Mestrado\Projeto-video-player\Main Project\Application\view" />
       <recent name="C:\Users\marci_wawp\Desktop\Arquivos\Mestrado\Projeto-video-player\Main Project\Application\models\dataClasses" />
       <recent name="C:\Users\marci_wawp\Desktop\Arquivos\Mestrado\Projeto-video-player\Main Project\Application\models" />
@@ -95,7 +100,7 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Main Project/Main.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Main_Project/Main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
